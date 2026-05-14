@@ -1,13 +1,13 @@
 import { Geist } from "next/font/google";
 import "./globals.css";
 import NextAuthProvider from "@/components/ui/SessionProvider";
-import Smartsupp from "@/components/ui/Smartsupp";
+import TawkTo from "@/components/ui/TawkTo";
 import Translator from "@/components/ui/Translator";
 
 const geist = Geist({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "StarReach — Where Fans Meet Fame",
+  title: "Gigceleb — Exclusive Celebrity Experiences",
   description:
     "The premier celebrity booking platform. Book VIP experiences, meet & greets, event appearances and more.",
   icons: {
@@ -23,7 +23,7 @@ export default function RootLayout({ children }) {
       <body className={geist.className}>
         <NextAuthProvider>
           {children}
-          <Smartsupp />
+          <TawkTo />
           <Translator />
         </NextAuthProvider>
       </body>

@@ -1,77 +1,35 @@
-"use client";
-import { useEffect, useRef, useState } from "react";
-
 const stats = [
-  { value: 500, suffix: "+", label: "Celebrities Listed" },
-  { value: 10000, suffix: "+", label: "Bookings Completed" },
-  { value: 50, suffix: "", label: "States Covered" },
-  { value: 4.9, suffix: "★", label: "Average Rating" },
+  { value: "500+", label: "Celebrities Listed", icon: "⭐" },
+  { value: "10,000+", label: "Bookings Completed", icon: "📅" },
+  { value: "50", label: "States Covered", icon: "🌎" },
+  { value: "4.9★", label: "Average Rating", icon: "🏆" },
 ];
-
-function CountUp({ value, suffix, duration = 2000 }) {
-  const [count, setCount] = useState(0);
-  const ref = useRef(null);
-  const started = useRef(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !started.current) {
-            started.current = true;
-            const start = Date.now();
-            const timer = setInterval(() => {
-              const elapsed = Date.now() - start;
-              const progress = Math.min(elapsed / duration, 1);
-              const eased =
-                progress < 0.5
-                  ? 2 * progress * progress
-                  : -1 + (4 - 2 * progress) * progress;
-              setCount(
-                value < 10
-                  ? parseFloat((eased * value).toFixed(1))
-                  : Math.floor(eased * value)
-              );
-              if (progress === 1) clearInterval(timer);
-            }, 16);
-          }
-        });
-      },
-      { threshold: 0.5 }
-    );
-
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [value, duration]);
-
-  return (
-    <span ref={ref}>
-      {count}
-      {suffix}
-    </span>
-  );
-}
 
 export default function Stats() {
   return (
-    <section className="bg-black py-16 sm:py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-white rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-white rounded-full blur-3xl" />
+    <section className="relative overflow-hidden">
+      {/* Gold bar */}
+      <div className="bg-yellow-400 py-3 px-4">
+        <div className="max-w-7xl mx-auto flex items-center justify-center gap-2">
+          <span className="text-black text-xs font-bold uppercase tracking-widest">
+            ⭐ The Premier Celebrity Booking Platform in the US
+          </span>
+        </div>
       </div>
 
-      <div className="max-w-7xl mx-auto relative z-10">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 sm:gap-10 text-center">
+      {/* Stats */}
+      <div className="bg-zinc-900 border-y border-yellow-400/20 py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map((stat, index) => (
             <div
               key={index}
-              className="group"
+              className="text-center group"
             >
-              <p className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">
-                <CountUp value={stat.value} suffix={stat.suffix} />
+              <p className="text-3xl mb-2">{stat.icon}</p>
+              <p className="text-3xl sm:text-4xl lg:text-5xl font-black text-yellow-400 mb-2 group-hover:scale-110 transition-transform duration-300">
+                {stat.value}
               </p>
-              <p className="text-gray-400 text-xs sm:text-sm uppercase tracking-widest">
+              <p className="text-gray-400 text-xs sm:text-sm uppercase tracking-widest font-medium">
                 {stat.label}
               </p>
             </div>

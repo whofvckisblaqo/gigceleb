@@ -4,29 +4,29 @@ import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
+const navLinks = [
+  { href: "/", label: "Home" },
+  { href: "/celebrities", label: "Celebrities" },
+  { href: "/booking-types", label: "Booking Types" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
+];
+
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { data: session, status } = useSession();
   const pathname = usePathname();
 
-  const navLinks = [
-    { href: "/", label: "Home" },
-    { href: "/celebrities", label: "Celebrities" },
-    { href: "/booking-types", label: "Booking Types" },
-    { href: "/about", label: "About" },
-    { href: "/contact", label: "Contact" },
-  ];
-
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-black border-b border-yellow-600/30">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
         {/* Logo */}
-        <Link href="/" className="text-2xl font-bold tracking-tight text-black">
-          Star<span className="text-gray-400">Reach</span> ⭐
+        <Link href="/" className="text-2xl font-bold tracking-tight text-white">
+          Gig<span className="text-yellow-400">celeb</span> ⭐
         </Link>
 
-        {/* Desktop Nav Links */}
+        {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <Link
@@ -34,8 +34,8 @@ export default function Navbar() {
               href={link.href}
               className={`text-sm transition ${
                 pathname === link.href
-                  ? "text-black font-semibold"
-                  : "text-gray-500 hover:text-black"
+                  ? "text-yellow-400 font-semibold"
+                  : "text-gray-400 hover:text-yellow-400"
               }`}
             >
               {link.label}
@@ -43,33 +43,29 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Desktop Auth Buttons */}
+        {/* Auth Buttons */}
         <div className="hidden md:flex items-center gap-3">
           {status === "loading" ? (
-            <div className="w-20 h-8 bg-gray-100 rounded-full animate-pulse" />
+            <div className="w-20 h-8 bg-yellow-900/30 rounded-full animate-pulse" />
           ) : session ? (
             <>
               <Link
                 href="/dashboard"
-                className={`text-sm px-5 py-2 rounded-full transition border ${
-                  pathname === "/dashboard"
-                    ? "bg-black text-white border-black"
-                    : "text-black border-black hover:bg-black hover:text-white"
-                }`}
+                className="text-sm text-yellow-400 border border-yellow-400 px-5 py-2 rounded-full hover:bg-yellow-400 hover:text-black transition"
               >
                 Dashboard
               </Link>
               {session.user.role === "admin" && (
                 <Link
                   href="/admin"
-                  className="text-sm px-5 py-2 rounded-full border border-gray-200 text-gray-600 hover:border-black hover:text-black transition"
+                  className="text-sm text-gray-400 border border-gray-600 px-5 py-2 rounded-full hover:border-yellow-400 hover:text-yellow-400 transition"
                 >
                   Admin
                 </Link>
               )}
               <button
                 onClick={() => signOut({ callbackUrl: "/" })}
-                className="text-sm bg-black text-white px-5 py-2 rounded-full hover:bg-gray-800 transition"
+                className="text-sm bg-yellow-400 text-black px-5 py-2 rounded-full hover:bg-yellow-300 transition font-semibold"
               >
                 Log Out
               </button>
@@ -78,13 +74,13 @@ export default function Navbar() {
             <>
               <Link
                 href="/login"
-                className="text-sm text-black border border-black px-5 py-2 rounded-full hover:bg-black hover:text-white transition"
+                className="text-sm text-yellow-400 border border-yellow-400 px-5 py-2 rounded-full hover:bg-yellow-400 hover:text-black transition"
               >
                 Log In
               </Link>
               <Link
                 href="/signup"
-                className="text-sm bg-black text-white px-5 py-2 rounded-full hover:bg-gray-800 transition"
+                className="text-sm bg-yellow-400 text-black px-5 py-2 rounded-full hover:bg-yellow-300 transition font-semibold"
               >
                 Sign Up
               </Link>
@@ -94,7 +90,7 @@ export default function Navbar() {
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden text-black text-xl"
+          className="md:hidden text-yellow-400 text-xl"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           {menuOpen ? "✕" : "☰"}
@@ -103,7 +99,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-100 px-6 py-4 flex flex-col gap-4">
+        <div className="md:hidden bg-black border-t border-yellow-600/30 px-6 py-4 flex flex-col gap-4">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -111,41 +107,26 @@ export default function Navbar() {
               onClick={() => setMenuOpen(false)}
               className={`text-sm transition ${
                 pathname === link.href
-                  ? "text-black font-semibold"
-                  : "text-gray-600 hover:text-black"
+                  ? "text-yellow-400 font-semibold"
+                  : "text-gray-400 hover:text-yellow-400"
               }`}
             >
               {link.label}
             </Link>
           ))}
-
-          <div className="border-t border-gray-100 pt-4 flex flex-col gap-3">
-            {status === "loading" ? (
-              <div className="w-full h-10 bg-gray-100 rounded-full animate-pulse" />
-            ) : session ? (
+          <div className="border-t border-yellow-600/30 pt-4 flex flex-col gap-3">
+            {session ? (
               <>
                 <Link
                   href="/dashboard"
                   onClick={() => setMenuOpen(false)}
-                  className="text-sm text-black border border-black px-5 py-2 rounded-full text-center hover:bg-black hover:text-white transition"
+                  className="text-sm text-yellow-400 border border-yellow-400 px-5 py-2 rounded-full text-center hover:bg-yellow-400 hover:text-black transition"
                 >
-                  My Dashboard
+                  Dashboard
                 </Link>
-                {session.user.role === "admin" && (
-                  <Link
-                    href="/admin"
-                    onClick={() => setMenuOpen(false)}
-                    className="text-sm text-gray-600 border border-gray-200 px-5 py-2 rounded-full text-center hover:border-black hover:text-black transition"
-                  >
-                    Admin Panel
-                  </Link>
-                )}
                 <button
-                  onClick={() => {
-                    setMenuOpen(false);
-                    signOut({ callbackUrl: "/" });
-                  }}
-                  className="text-sm bg-black text-white px-5 py-2 rounded-full text-center hover:bg-gray-800 transition"
+                  onClick={() => { setMenuOpen(false); signOut({ callbackUrl: "/" }); }}
+                  className="text-sm bg-yellow-400 text-black px-5 py-2 rounded-full text-center hover:bg-yellow-300 transition font-semibold"
                 >
                   Log Out
                 </button>
@@ -155,14 +136,14 @@ export default function Navbar() {
                 <Link
                   href="/login"
                   onClick={() => setMenuOpen(false)}
-                  className="text-sm text-black border border-black px-5 py-2 rounded-full text-center hover:bg-black hover:text-white transition"
+                  className="text-sm text-yellow-400 border border-yellow-400 px-5 py-2 rounded-full text-center hover:bg-yellow-400 hover:text-black transition"
                 >
                   Log In
                 </Link>
                 <Link
                   href="/signup"
                   onClick={() => setMenuOpen(false)}
-                  className="text-sm bg-black text-white px-5 py-2 rounded-full text-center hover:bg-gray-800 transition"
+                  className="text-sm bg-yellow-400 text-black px-5 py-2 rounded-full text-center hover:bg-yellow-300 transition font-semibold"
                 >
                   Sign Up
                 </Link>

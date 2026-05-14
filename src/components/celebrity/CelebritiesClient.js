@@ -5,18 +5,11 @@ import Link from "next/link";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 
-const PLACEHOLDER = "https://placehold.co/400x500/f3f4f6/9ca3af?text=No+Photo";
+const PLACEHOLDER = "https://placehold.co/400x500/1a1a1a/FFD700?text=No+Photo";
 
 const categories = [
-  "All",
-  "Music",
-  "Film",
-  "Sports",
-  "Comedy",
-  "Media",
-  "Fashion",
-  "Business",
-  "Politics",
+  "All", "Music", "Film", "Sports", "Comedy",
+  "Media", "Fashion", "Business", "Politics",
 ];
 
 export default function CelebritiesClient() {
@@ -33,30 +26,19 @@ export default function CelebritiesClient() {
       if (search) params.set("search", search);
 
       const res = await fetch(`/api/celebrities?${params.toString()}`);
-
-      if (!res.ok) {
-        console.error("API error:", res.status);
-        setLoading(false);
-        return;
-      }
-
+      if (!res.ok) { setLoading(false); return; }
       const data = await res.json();
       setCelebrities(data.celebrities || []);
     } catch (error) {
-      console.error("Error fetching celebrities:", error);
+      console.error("Error:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchCelebrities();
-  }, [activeCategory]);
+  useEffect(() => { fetchCelebrities(); }, [activeCategory]);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    fetchCelebrities();
-  };
+  const handleSearch = (e) => { e.preventDefault(); fetchCelebrities(); };
 
   const getLowestPrice = (bookingTypes) => {
     if (!bookingTypes) return null;
@@ -70,18 +52,18 @@ export default function CelebritiesClient() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-white pt-24">
+      <main className="min-h-screen bg-black pt-24">
         {/* Header */}
-        <section className="bg-black py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
+        <section className="bg-zinc-950 border-b border-yellow-400/20 py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto text-center">
-            <p className="uppercase tracking-widest text-xs text-gray-400 mb-3">
+            <p className="uppercase tracking-widest text-xs text-yellow-400 mb-3 font-semibold">
               Our Roster
             </p>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4">
               Browse Celebrities
             </h1>
             <p className="text-gray-400 text-base sm:text-lg max-w-xl mx-auto">
-              Find and book the perfect celebrity for your experience.
+              Find and book the perfect celebrity for your exclusive experience.
             </p>
 
             {/* Search */}
@@ -94,11 +76,11 @@ export default function CelebritiesClient() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search celebrities..."
-                className="flex-1 bg-white/10 border border-white/20 text-white placeholder-gray-400 rounded-full px-5 py-3 text-sm focus:outline-none focus:border-white transition"
+                className="flex-1 bg-zinc-900 border border-yellow-400/30 text-white placeholder-gray-500 rounded-full px-5 py-3 text-sm focus:outline-none focus:border-yellow-400 transition"
               />
               <button
                 type="submit"
-                className="bg-white text-black px-6 py-3 rounded-full text-sm font-semibold hover:bg-gray-100 transition"
+                className="bg-yellow-400 text-black px-6 py-3 rounded-full text-sm font-bold hover:bg-yellow-300 transition"
               >
                 Search
               </button>
@@ -107,7 +89,7 @@ export default function CelebritiesClient() {
         </section>
 
         {/* Filter Categories */}
-        <section className="border-b border-gray-100 px-4 sm:px-6 lg:px-8 sticky top-16 bg-white z-30">
+        <section className="border-b border-yellow-400/20 px-4 sm:px-6 lg:px-8 sticky top-16 bg-black z-30">
           <div className="max-w-7xl mx-auto overflow-x-auto">
             <div className="flex gap-2 py-4 w-max sm:w-auto">
               {categories.map((cat) => (
@@ -116,8 +98,8 @@ export default function CelebritiesClient() {
                   onClick={() => setActiveCategory(cat)}
                   className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition ${
                     activeCategory === cat
-                      ? "bg-black text-white"
-                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                      ? "bg-yellow-400 text-black font-bold"
+                      : "bg-zinc-900 text-gray-400 hover:text-yellow-400 hover:bg-zinc-800"
                   }`}
                 >
                   {cat}
@@ -134,21 +116,17 @@ export default function CelebritiesClient() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {[...Array(8)].map((_, i) => (
                   <div key={i} className="animate-pulse">
-                    <div className="bg-gray-200 rounded-2xl h-64 w-full mb-4" />
-                    <div className="bg-gray-200 rounded h-4 w-3/4 mb-2" />
-                    <div className="bg-gray-200 rounded h-4 w-1/2" />
+                    <div className="bg-zinc-800 rounded-2xl h-64 w-full mb-4" />
+                    <div className="bg-zinc-800 rounded h-4 w-3/4 mb-2" />
+                    <div className="bg-zinc-800 rounded h-4 w-1/2" />
                   </div>
                 ))}
               </div>
             ) : celebrities.length === 0 ? (
               <div className="text-center py-20">
                 <p className="text-5xl mb-4">🔍</p>
-                <h3 className="text-xl font-bold text-black mb-2">
-                  No celebrities found
-                </h3>
-                <p className="text-gray-500 text-sm">
-                  Try a different search or category.
-                </p>
+                <h3 className="text-xl font-bold text-white mb-2">No celebrities found</h3>
+                <p className="text-gray-500 text-sm">Try a different search or category.</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -156,9 +134,8 @@ export default function CelebritiesClient() {
                   <Link
                     key={celeb._id}
                     href={`/celebrities/${celeb.slug}`}
-                    className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100"
+                    className="group bg-zinc-900 rounded-2xl overflow-hidden border border-yellow-400/20 hover:border-yellow-400/60 transition-all duration-300"
                   >
-                    {/* Image */}
                     <div className="relative h-64 w-full overflow-hidden">
                       <Image
                         src={celeb.photo || PLACEHOLDER}
@@ -168,31 +145,23 @@ export default function CelebritiesClient() {
                         className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
                       />
                       {celeb.featured && (
-                        <span className="absolute top-3 left-3 bg-black text-white text-xs px-3 py-1 rounded-full">
+                        <span className="absolute top-3 left-3 bg-yellow-400 text-black text-xs px-3 py-1 rounded-full font-bold">
                           ⭐ Featured
                         </span>
                       )}
                     </div>
-
-                    {/* Info */}
                     <div className="p-5">
-                      <h3 className="text-base font-bold text-black mb-1">
-                        {celeb.name}
-                      </h3>
-                      <p className="text-gray-400 text-xs mb-3">
-                        {celeb.category}
-                      </p>
+                      <h3 className="text-base font-bold text-white mb-1">{celeb.name}</h3>
+                      <p className="text-gray-500 text-xs mb-3">{celeb.category}</p>
                       <div className="flex items-center justify-between">
                         {getLowestPrice(celeb.bookingTypes) ? (
-                          <p className="text-black font-semibold text-sm">
+                          <p className="text-yellow-400 font-semibold text-sm">
                             From ${getLowestPrice(celeb.bookingTypes)}
                           </p>
                         ) : (
-                          <p className="text-gray-400 text-sm">
-                            Contact for pricing
-                          </p>
+                          <p className="text-gray-500 text-sm">Contact for pricing</p>
                         )}
-                        <span className="text-xs text-gray-400 group-hover:text-black transition">
+                        <span className="text-xs text-gray-500 group-hover:text-yellow-400 transition">
                           View →
                         </span>
                       </div>

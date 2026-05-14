@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-const PLACEHOLDER = "https://placehold.co/400x500/f3f4f6/9ca3af?text=No+Photo";
+const PLACEHOLDER = "https://placehold.co/400x500/1a1a1a/FFD700?text=No+Photo";
 
 export default function FeaturedCelebrities() {
   const [celebrities, setCelebrities] = useState([]);
@@ -16,7 +16,7 @@ export default function FeaturedCelebrities() {
         const data = await res.json();
         setCelebrities(data.celebrities || []);
       } catch (error) {
-        console.error("Error fetching featured celebrities:", error);
+        console.error("Error:", error);
       } finally {
         setLoading(false);
       }
@@ -35,23 +35,17 @@ export default function FeaturedCelebrities() {
 
   if (loading) {
     return (
-      <section className="py-16 sm:py-20 lg:py-24 bg-gray-50 px-4 sm:px-6 lg:px-8">
+      <section className="py-16 sm:py-24 bg-zinc-950 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12 sm:mb-16">
-            <p className="uppercase tracking-widest text-xs text-gray-400 mb-3">
-              Our Roster
-            </p>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-black">
-              Featured Celebrities
-            </h2>
+          <div className="flex justify-between items-end mb-10">
+            <div>
+              <div className="h-3 bg-zinc-800 rounded w-24 mb-3" />
+              <div className="h-8 bg-zinc-800 rounded w-64" />
+            </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="animate-pulse">
-                <div className="bg-gray-200 rounded-2xl h-72 w-full mb-4" />
-                <div className="bg-gray-200 rounded h-4 w-3/4 mb-2" />
-                <div className="bg-gray-200 rounded h-4 w-1/2" />
-              </div>
+              <div key={i} className="animate-pulse bg-zinc-900 rounded-2xl h-80" />
             ))}
           </div>
         </div>
@@ -59,68 +53,94 @@ export default function FeaturedCelebrities() {
     );
   }
 
-  if (celebrities.length === 0) {
-    return null;
-  }
+  if (celebrities.length === 0) return null;
 
   return (
-    <section className="py-16 sm:py-20 lg:py-24 bg-gray-50 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12 sm:mb-16">
-          <p className="uppercase tracking-widest text-xs text-gray-400 mb-3">
-            Our Roster
-          </p>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-black">
-            Featured Celebrities
-          </h2>
-          <p className="text-gray-500 mt-4 max-w-xl mx-auto text-sm sm:text-base">
-            Browse our curated selection of A-list talent available for booking
-            right now.
-          </p>
+    <section className="py-16 sm:py-24 bg-zinc-950 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-yellow-400/5 rounded-full blur-3xl" />
+
+      <div className="max-w-7xl mx-auto relative z-10">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12 gap-4">
+          <div>
+            <p className="uppercase tracking-widest text-xs text-yellow-400 mb-3 font-bold">
+              — Our Roster
+            </p>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white">
+              Featured <span className="text-yellow-400">Celebrities</span>
+            </h2>
+          </div>
+          <Link
+            href="/celebrities"
+            className="inline-flex items-center gap-2 text-sm text-yellow-400 border border-yellow-400/30 px-5 py-2.5 rounded-full hover:bg-yellow-400 hover:text-black transition font-semibold self-start sm:self-auto"
+          >
+            View All →
+          </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {celebrities.map((celeb) => (
-            <div
+        {/* Celebrity Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {celebrities.map((celeb, index) => (
+            <Link
               key={celeb._id}
-              className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group"
+              href={`/celebrities/${celeb.slug}`}
+              className="group relative bg-zinc-900 rounded-2xl overflow-hidden border border-yellow-400/10 hover:border-yellow-400/50 transition-all duration-500"
             >
-              <div className="relative h-64 sm:h-72 w-full overflow-hidden">
+              {/* Image */}
+              <div className="relative h-72 w-full overflow-hidden">
                 <Image
                   src={celeb.photo || PLACEHOLDER}
                   alt={celeb.name}
                   fill
-                  className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="object-cover object-top group-hover:scale-110 transition-transform duration-700"
                 />
-              </div>
-              <div className="p-5 sm:p-6">
-                <h3 className="text-base sm:text-lg font-bold text-black">
-                  {celeb.name}
-                </h3>
-                <p className="text-gray-400 text-sm mb-1">{celeb.category}</p>
-                {getLowestPrice(celeb.bookingTypes) && (
-                  <p className="text-black font-semibold text-sm mb-4">
-                    From ${getLowestPrice(celeb.bookingTypes)}
-                  </p>
-                )}
-                <Link
-                  href={`/celebrities/${celeb.slug}`}
-                  className="block text-center bg-black text-white text-sm px-6 py-3 rounded-full hover:bg-gray-800 transition"
-                >
-                  Book Now
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent" />
 
-        <div className="text-center mt-10 sm:mt-12">
-          <Link
-            href="/celebrities"
-            className="inline-block border border-black text-black px-8 py-4 rounded-full text-sm font-semibold hover:bg-black hover:text-white transition"
-          >
-            View All Celebrities
-          </Link>
+                {/* Featured badge */}
+                {celeb.featured && (
+                  <span className="absolute top-3 left-3 bg-yellow-400 text-black text-xs px-3 py-1 rounded-full font-black">
+                    ⭐ Featured
+                  </span>
+                )}
+
+                {/* Index number */}
+                <span className="absolute top-3 right-3 text-yellow-400/30 text-3xl font-black">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+              </div>
+
+              {/* Info */}
+              <div className="p-5">
+                <div className="flex items-start justify-between gap-2 mb-3">
+                  <div>
+                    <h3 className="text-lg font-black text-white group-hover:text-yellow-400 transition-colors duration-300">
+                      {celeb.name}
+                    </h3>
+                    <p className="text-gray-500 text-xs mt-0.5">{celeb.category}</p>
+                  </div>
+                  <div className="text-right flex-shrink-0">
+                    {getLowestPrice(celeb.bookingTypes) && (
+                      <p className="text-yellow-400 font-bold text-sm">
+                        From ${getLowestPrice(celeb.bookingTypes)}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between pt-3 border-t border-yellow-400/10">
+                  <span className="text-xs text-gray-500 uppercase tracking-wider">
+                    Available Now
+                  </span>
+                  <span className="w-7 h-7 rounded-full border border-yellow-400/30 flex items-center justify-center text-yellow-400 text-xs group-hover:bg-yellow-400 group-hover:text-black transition-all duration-300">
+                    →
+                  </span>
+                </div>
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
     </section>
