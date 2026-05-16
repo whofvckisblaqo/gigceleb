@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import VerifiedBadge from "@/components/ui/VerifiedBadge";
 
 const PLACEHOLDER = "https://placehold.co/400x500/1a1a1a/FFD700?text=No+Photo";
 
@@ -39,8 +40,8 @@ export default function FeaturedCelebrities() {
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-end mb-10">
             <div>
-              <div className="h-3 bg-zinc-800 rounded w-24 mb-3" />
-              <div className="h-8 bg-zinc-800 rounded w-64" />
+              <div className="h-3 bg-zinc-800 rounded w-24 mb-3 animate-pulse" />
+              <div className="h-8 bg-zinc-800 rounded w-64 animate-pulse" />
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -57,7 +58,6 @@ export default function FeaturedCelebrities() {
 
   return (
     <section className="py-16 sm:py-24 bg-zinc-950 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      {/* Background decoration */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-yellow-400/5 rounded-full blur-3xl" />
 
       <div className="max-w-7xl mx-auto relative z-10">
@@ -79,7 +79,7 @@ export default function FeaturedCelebrities() {
           </Link>
         </div>
 
-        {/* Celebrity Grid */}
+        {/* Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {celebrities.map((celeb, index) => (
             <Link
@@ -96,7 +96,6 @@ export default function FeaturedCelebrities() {
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   className="object-cover object-top group-hover:scale-110 transition-transform duration-700"
                 />
-                {/* Gradient overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent" />
 
                 {/* Featured badge */}
@@ -106,8 +105,15 @@ export default function FeaturedCelebrities() {
                   </span>
                 )}
 
+                {/* Verified badge */}
+                {celeb.verified && (
+                  <div className="absolute top-3 right-3">
+                    <VerifiedBadge size="md" />
+                  </div>
+                )}
+
                 {/* Index number */}
-                <span className="absolute top-3 right-3 text-yellow-400/30 text-3xl font-black">
+                <span className="absolute bottom-3 right-3 text-yellow-400/20 text-3xl font-black">
                   {String(index + 1).padStart(2, "0")}
                 </span>
               </div>
@@ -116,14 +122,17 @@ export default function FeaturedCelebrities() {
               <div className="p-5">
                 <div className="flex items-start justify-between gap-2 mb-3">
                   <div>
-                    <h3 className="text-lg font-black text-white group-hover:text-yellow-400 transition-colors duration-300">
-                      {celeb.name}
-                    </h3>
-                    <p className="text-gray-500 text-xs mt-0.5">{celeb.category}</p>
+                    <div className="flex items-center gap-1.5 mb-0.5">
+                      <h3 className="text-lg font-black text-white group-hover:text-yellow-400 transition-colors duration-300">
+                        {celeb.name}
+                      </h3>
+                      {celeb.verified && <VerifiedBadge size="sm" />}
+                    </div>
+                    <p className="text-gray-500 text-xs">{celeb.category}</p>
                   </div>
                   <div className="text-right flex-shrink-0">
                     {getLowestPrice(celeb.bookingTypes) && (
-                      <p className="text-yellow-400 font-bold text-sm">
+                      <p className="text-yellow-400 font-black text-sm">
                         From ${getLowestPrice(celeb.bookingTypes)}
                       </p>
                     )}

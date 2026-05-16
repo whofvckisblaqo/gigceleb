@@ -34,6 +34,7 @@ export default function AddCelebrityForm() {
     nationality: "American",
     featured: false,
     available: true,
+    verified: false,
     bookingTypes: {
       vipMembership: { available: false, price: "" },
       meetAndGreet: { available: false, price: "" },
@@ -79,22 +80,14 @@ export default function AddCelebrityForm() {
     setError("");
     setSuccess("");
     setLoading(true);
-
     try {
       const res = await fetch("/api/admin/celebrities", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-
       const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || "Failed to add celebrity");
-        setLoading(false);
-        return;
-      }
-
+      if (!res.ok) { setError(data.error || "Failed to add celebrity"); setLoading(false); return; }
       setSuccess("Celebrity added successfully!");
       setTimeout(() => router.push("/admin/celebrities"), 1500);
     } catch (error) {
@@ -109,108 +102,47 @@ export default function AddCelebrityForm() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <p className="text-yellow-400 text-xs uppercase tracking-widest font-bold mb-1">
-            Management
-          </p>
-          <h1 className="text-2xl sm:text-3xl font-black text-white">
-            Add Celebrity
-          </h1>
+          <p className="text-yellow-400 text-xs uppercase tracking-widest font-bold mb-1">Management</p>
+          <h1 className="text-2xl sm:text-3xl font-black text-white">Add Celebrity</h1>
         </div>
-        <Link
-          href="/admin/celebrities"
-          className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-yellow-400 transition"
-        >
+        <Link href="/admin/celebrities" className="text-sm text-gray-400 hover:text-yellow-400 transition">
           ← Back to Celebrities
         </Link>
       </div>
 
-      {error && (
-        <div className="bg-red-400/10 border border-red-400/30 text-red-400 text-sm px-4 py-3 rounded-xl mb-6">
-          {error}
-        </div>
-      )}
-
-      {success && (
-        <div className="bg-green-400/10 border border-green-400/30 text-green-400 text-sm px-4 py-3 rounded-xl mb-6">
-          {success}
-        </div>
-      )}
+      {error && <div className="bg-red-400/10 border border-red-400/30 text-red-400 text-sm px-4 py-3 rounded-xl mb-6">{error}</div>}
+      {success && <div className="bg-green-400/10 border border-green-400/30 text-green-400 text-sm px-4 py-3 rounded-xl mb-6">{success}</div>}
 
       <form onSubmit={handleSubmit} className="space-y-6">
 
         {/* Basic Info */}
         <div className={cardClass}>
-          <h2 className="text-lg font-black text-white mb-6">
-            Basic Information
-          </h2>
+          <h2 className="text-lg font-black text-white mb-6">Basic Information</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
               <label className={labelClass}>Full Name *</label>
-              <input
-                type="text"
-                name="name"
-                value={form.name}
-                onChange={handleNameChange}
-                placeholder="e.g. Beyoncé"
-                required
-                className={inputClass}
-              />
+              <input type="text" name="name" value={form.name} onChange={handleNameChange} placeholder="e.g. Beyoncé" required className={inputClass} />
             </div>
-
             <div>
               <label className={labelClass}>Slug (auto-generated)</label>
-              <input
-                type="text"
-                name="slug"
-                value={form.slug}
-                onChange={handleChange}
-                placeholder="e.g. beyonce"
-                required
-                className={inputClass}
-              />
+              <input type="text" name="slug" value={form.slug} onChange={handleChange} placeholder="e.g. beyonce" required className={inputClass} />
             </div>
-
             <div>
               <label className={labelClass}>Category *</label>
-              <select
-                name="category"
-                value={form.category}
-                onChange={handleChange}
-                required
-                className={inputClass}
-              >
+              <select name="category" value={form.category} onChange={handleChange} required className={inputClass}>
                 <option value="" className="bg-zinc-800">Select category</option>
-                {categories.map((cat) => (
-                  <option key={cat} value={cat} className="bg-zinc-800">{cat}</option>
-                ))}
+                {categories.map((cat) => <option key={cat} value={cat} className="bg-zinc-800">{cat}</option>)}
               </select>
             </div>
-
             <div>
               <label className={labelClass}>Nationality</label>
-              <input
-                type="text"
-                name="nationality"
-                value={form.nationality}
-                onChange={handleChange}
-                placeholder="e.g. American"
-                className={inputClass}
-              />
+              <input type="text" name="nationality" value={form.nationality} onChange={handleChange} placeholder="e.g. American" className={inputClass} />
             </div>
-
             <div className="sm:col-span-2">
               <label className={labelClass}>Bio</label>
-              <textarea
-                name="bio"
-                value={form.bio}
-                onChange={handleChange}
-                placeholder="Write a short biography..."
-                rows={4}
-                className={`${inputClass} resize-none`}
-              />
+              <textarea name="bio" value={form.bio} onChange={handleChange} placeholder="Write a short biography..." rows={4} className={`${inputClass} resize-none`} />
             </div>
           </div>
         </div>
@@ -219,73 +151,27 @@ export default function AddCelebrityForm() {
         <div className={cardClass}>
           <h2 className="text-lg font-black text-white mb-6">Images</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <ImageUpload
-              label="Celebrity Photo *"
-              value={form.photo}
-              onChange={(url) => setForm((prev) => ({ ...prev, photo: url }))}
-              hint="Main photo shown on celebrity card and profile"
-            />
-            <ImageUpload
-              label="Cover Image"
-              value={form.coverImage}
-              onChange={(url) => setForm((prev) => ({ ...prev, coverImage: url }))}
-              hint="Banner image shown at top of celebrity profile"
-            />
+            <ImageUpload label="Celebrity Photo *" value={form.photo} onChange={(url) => setForm((prev) => ({ ...prev, photo: url }))} hint="Main photo shown on celebrity card and profile" />
+            <ImageUpload label="Cover Image" value={form.coverImage} onChange={(url) => setForm((prev) => ({ ...prev, coverImage: url }))} hint="Banner image shown at top of celebrity profile" />
           </div>
         </div>
 
         {/* Booking Types */}
         <div className={cardClass}>
-          <h2 className="text-lg font-black text-white mb-2">
-            Booking Types & Pricing
-          </h2>
-          <p className="text-gray-500 text-sm mb-6">
-            Enable booking types and set prices for this celebrity.
-          </p>
-
+          <h2 className="text-lg font-black text-white mb-2">Booking Types & Pricing</h2>
+          <p className="text-gray-500 text-sm mb-6">Enable booking types and set prices for this celebrity.</p>
           <div className="space-y-3">
             {bookingTypes.map((type) => (
-              <div
-                key={type.key}
-                className={`border rounded-xl p-4 transition ${
-                  form.bookingTypes[type.key].available
-                    ? "border-yellow-400/50 bg-yellow-400/5"
-                    : "border-zinc-700 bg-zinc-800/50"
-                }`}
-              >
+              <div key={type.key} className={`border rounded-xl p-4 transition ${form.bookingTypes[type.key].available ? "border-yellow-400/50 bg-yellow-400/5" : "border-zinc-700 bg-zinc-800/50"}`}>
                 <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                   <div className="flex items-center gap-3 flex-1">
-                    <input
-                      type="checkbox"
-                      id={type.key}
-                      checked={form.bookingTypes[type.key].available}
-                      onChange={(e) =>
-                        handleBookingTypeChange(type.key, "available", e.target.checked)
-                      }
-                      className="w-4 h-4 cursor-pointer accent-yellow-400"
-                    />
-                    <label
-                      htmlFor={type.key}
-                      className="text-sm font-semibold text-white cursor-pointer"
-                    >
-                      {type.icon} {type.label}
-                    </label>
+                    <input type="checkbox" id={type.key} checked={form.bookingTypes[type.key].available} onChange={(e) => handleBookingTypeChange(type.key, "available", e.target.checked)} className="w-4 h-4 cursor-pointer accent-yellow-400" />
+                    <label htmlFor={type.key} className="text-sm font-semibold text-white cursor-pointer">{type.icon} {type.label}</label>
                   </div>
-
                   {form.bookingTypes[type.key].available && (
                     <div className="flex items-center gap-2">
                       <span className="text-sm text-gray-400">$</span>
-                      <input
-                        type="number"
-                        value={form.bookingTypes[type.key].price}
-                        onChange={(e) =>
-                          handleBookingTypeChange(type.key, "price", e.target.value)
-                        }
-                        placeholder="Price in USD"
-                        min="0"
-                        required
-                        className="bg-zinc-700 border border-zinc-600 focus:border-yellow-400 rounded-xl px-4 py-2 text-sm text-white placeholder-gray-500 focus:outline-none transition w-40"
-                      />
+                      <input type="number" value={form.bookingTypes[type.key].price} onChange={(e) => handleBookingTypeChange(type.key, "price", e.target.value)} placeholder="Price in USD" min="0" required className="bg-zinc-700 border border-zinc-600 focus:border-yellow-400 rounded-xl px-4 py-2 text-sm text-white placeholder-gray-500 focus:outline-none transition w-40" />
                     </div>
                   )}
                 </div>
@@ -297,15 +183,9 @@ export default function AddCelebrityForm() {
         {/* Settings */}
         <div className={cardClass}>
           <h2 className="text-lg font-black text-white mb-6">Settings</h2>
-          <div className="flex flex-col sm:flex-row gap-6">
+          <div className="flex flex-col sm:flex-row gap-6 flex-wrap">
             <label className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                name="featured"
-                checked={form.featured}
-                onChange={handleChange}
-                className="w-4 h-4 accent-yellow-400"
-              />
+              <input type="checkbox" name="featured" checked={form.featured} onChange={handleChange} className="w-4 h-4 accent-yellow-400" />
               <div>
                 <p className="text-sm font-semibold text-white">Featured Celebrity</p>
                 <p className="text-xs text-gray-500">Show on homepage featured section</p>
@@ -313,16 +193,25 @@ export default function AddCelebrityForm() {
             </label>
 
             <label className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                name="available"
-                checked={form.available}
-                onChange={handleChange}
-                className="w-4 h-4 accent-yellow-400"
-              />
+              <input type="checkbox" name="available" checked={form.available} onChange={handleChange} className="w-4 h-4 accent-yellow-400" />
               <div>
                 <p className="text-sm font-semibold text-white">Available for Booking</p>
                 <p className="text-xs text-gray-500">Make this celebrity bookable</p>
+              </div>
+            </label>
+
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input type="checkbox" name="verified" checked={form.verified} onChange={handleChange} className="w-4 h-4 accent-blue-400" />
+              <div>
+                <p className="text-sm font-semibold text-white flex items-center gap-2">
+                  Verified Celebrity
+                  <span className="inline-flex items-center justify-center w-5 h-5 bg-blue-500 rounded-full">
+                    <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </span>
+                </p>
+                <p className="text-xs text-gray-500">Show blue tick verification badge</p>
               </div>
             </label>
           </div>
@@ -330,17 +219,10 @@ export default function AddCelebrityForm() {
 
         {/* Submit */}
         <div className="flex flex-col sm:flex-row gap-4">
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full sm:w-auto bg-yellow-400 text-black px-10 py-4 rounded-full text-sm font-black hover:bg-yellow-300 transition disabled:opacity-50"
-          >
+          <button type="submit" disabled={loading} className="w-full sm:w-auto bg-yellow-400 text-black px-10 py-4 rounded-full text-sm font-black hover:bg-yellow-300 transition disabled:opacity-50">
             {loading ? "Adding Celebrity..." : "Add Celebrity"}
           </button>
-          <Link
-            href="/admin/celebrities"
-            className="w-full sm:w-auto border border-yellow-400/30 text-gray-400 px-10 py-4 rounded-full text-sm font-semibold hover:border-yellow-400 hover:text-yellow-400 transition text-center"
-          >
+          <Link href="/admin/celebrities" className="w-full sm:w-auto border border-yellow-400/30 text-gray-400 px-10 py-4 rounded-full text-sm font-semibold hover:border-yellow-400 hover:text-yellow-400 transition text-center">
             Cancel
           </Link>
         </div>

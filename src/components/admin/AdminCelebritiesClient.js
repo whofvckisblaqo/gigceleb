@@ -100,6 +100,7 @@ export default function AdminCelebritiesClient() {
                   <th className="text-left px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider hidden sm:table-cell">Category</th>
                   <th className="text-left px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider hidden md:table-cell">Status</th>
                   <th className="text-left px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider hidden lg:table-cell">Featured</th>
+                  <th className="text-left px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider hidden lg:table-cell">Verified</th>
                   <th className="text-right px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
@@ -117,7 +118,16 @@ export default function AdminCelebritiesClient() {
                           />
                         </div>
                         <div>
-                          <p className="font-black text-white text-sm">{celeb.name}</p>
+                          <div className="flex items-center gap-1.5">
+                            <p className="font-black text-white text-sm">{celeb.name}</p>
+                            {celeb.verified && (
+                              <span className="inline-flex items-center justify-center w-4 h-4 bg-blue-500 rounded-full flex-shrink-0">
+                                <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
+                              </span>
+                            )}
+                          </div>
                           <p className="text-gray-500 text-xs">{celeb.nationality}</p>
                         </div>
                       </div>
@@ -141,6 +151,15 @@ export default function AdminCelebritiesClient() {
                           : "bg-zinc-700 text-gray-500"
                       }`}>
                         {celeb.featured ? "⭐ Featured" : "No"}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 hidden lg:table-cell">
+                      <span className={`text-xs px-3 py-1 rounded-full font-bold ${
+                        celeb.verified
+                          ? "bg-blue-500/10 text-blue-400"
+                          : "bg-zinc-700 text-gray-500"
+                      }`}>
+                        {celeb.verified ? "✓ Verified" : "No"}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">

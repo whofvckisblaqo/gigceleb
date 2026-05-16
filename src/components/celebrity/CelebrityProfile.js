@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
+import VerifiedBadge from "@/components/ui/VerifiedBadge";
 
 const PLACEHOLDER = "https://placehold.co/400x600/1a1a1a/FFD700?text=No+Photo";
 const COVER_PLACEHOLDER = "https://placehold.co/1200x400/111111/FFD700?text=Gigceleb";
@@ -188,8 +189,13 @@ export default function CelebrityProfile({ params }) {
                   {celebrity.nationality || "American"}
                 </span>
                 {celebrity.featured && (
-                  <span className="bg-yellow-400 text-black text-xs px-3 py-1 rounded-full font-bold">
+                  <span className="bg-yellow-400 text-black text-xs px-3 py-1 rounded-full font-black">
                     ⭐ Featured
+                  </span>
+                )}
+                {celebrity.verified && (
+                  <span className="bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs px-3 py-1 rounded-full font-bold flex items-center gap-1">
+                    <VerifiedBadge size="sm" /> Verified
                   </span>
                 )}
               </div>
@@ -197,9 +203,14 @@ export default function CelebrityProfile({ params }) {
 
             {/* Right — Details */}
             <div className="flex-1 pt-4 lg:pt-8">
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-2">
-                {celebrity.name}
-              </h1>
+              {/* Name with verified badge */}
+              <div className="flex items-center gap-3 flex-wrap mb-2">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white">
+                  {celebrity.name}
+                </h1>
+                {celebrity.verified && <VerifiedBadge size="lg" />}
+              </div>
+
               <p className="text-gray-400 text-sm sm:text-base mb-8 leading-relaxed max-w-2xl">
                 {celebrity.bio || "No biography available."}
               </p>
@@ -234,18 +245,13 @@ export default function CelebrityProfile({ params }) {
                           backgroundPosition: "center",
                         }}
                       >
-                        {/* Overlay */}
-                        <div className={`absolute inset-0 ${bookingTypeLabels[key]?.overlay} transition-opacity duration-300`} />
-
-                        {/* Selected indicator */}
+                        <div className={`absolute inset-0 ${bookingTypeLabels[key]?.overlay}`} />
                         {selectedType === key && (
                           <div className="absolute inset-0 bg-white/5" />
                         )}
-
-                        {/* Content */}
                         <div className="absolute inset-0 flex items-end justify-between p-4">
                           <div>
-                            <p className={`${bookingTypeLabels[key]?.priceColor} text-xs mb-0.5 font-bold`}>
+                            <p className={`${bookingTypeLabels[key]?.priceColor} text-xs mb-0.5 font-black`}>
                               ${value.price.toLocaleString()}
                             </p>
                             <p className="text-white font-black text-sm sm:text-base">
@@ -254,8 +260,10 @@ export default function CelebrityProfile({ params }) {
                             </p>
                           </div>
                           {selectedType === key && (
-                            <div className={`w-7 h-7 rounded-full ${bookingTypeLabels[key]?.priceColor.replace("text-", "bg-")} flex items-center justify-center flex-shrink-0`}>
-                              <span className="text-black text-xs font-black">✓</span>
+                            <div className="w-7 h-7 rounded-full bg-white flex items-center justify-center flex-shrink-0">
+                              <svg className="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                              </svg>
                             </div>
                           )}
                         </div>

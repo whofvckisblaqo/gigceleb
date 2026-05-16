@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 
+const BookingTypeSchema = new mongoose.Schema({
+  available: { type: Boolean, default: false },
+  price: { type: Number, default: 0 },
+});
+
 const CelebritySchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
@@ -11,13 +16,14 @@ const CelebritySchema = new mongoose.Schema(
     nationality: { type: String, default: "American" },
     featured: { type: Boolean, default: false },
     available: { type: Boolean, default: true },
+    verified: { type: Boolean, default: false },
     bookingTypes: {
-      vipMembership: { available: Boolean, price: Number },
-      meetAndGreet: { available: Boolean, price: Number },
-      eventAppearance: { available: Boolean, price: Number },
-      privateReservation: { available: Boolean, price: Number },
-      productEndorsement: { available: Boolean, price: Number },
-      weeklyAppointment: { available: Boolean, price: Number },
+      vipMembership: { type: BookingTypeSchema, default: () => ({}) },
+      meetAndGreet: { type: BookingTypeSchema, default: () => ({}) },
+      eventAppearance: { type: BookingTypeSchema, default: () => ({}) },
+      privateReservation: { type: BookingTypeSchema, default: () => ({}) },
+      productEndorsement: { type: BookingTypeSchema, default: () => ({}) },
+      weeklyAppointment: { type: BookingTypeSchema, default: () => ({}) },
     },
   },
   { timestamps: true }

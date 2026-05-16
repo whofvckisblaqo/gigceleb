@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
+import VerifiedBadge from "@/components/ui/VerifiedBadge";
 
 const PLACEHOLDER = "https://placehold.co/400x500/1a1a1a/FFD700?text=No+Photo";
 
@@ -56,11 +57,11 @@ export default function CelebritiesClient() {
         {/* Header */}
         <section className="bg-zinc-950 border-b border-yellow-400/20 py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto text-center">
-            <p className="uppercase tracking-widest text-xs text-yellow-400 mb-3 font-semibold">
-              Our Roster
+            <p className="uppercase tracking-widest text-xs text-yellow-400 mb-3 font-bold">
+              — Our Roster
             </p>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4">
-              Browse Celebrities
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-white mb-4">
+              Browse <span className="text-yellow-400">Celebrities</span>
             </h1>
             <p className="text-gray-400 text-base sm:text-lg max-w-xl mx-auto">
               Find and book the perfect celebrity for your exclusive experience.
@@ -80,7 +81,7 @@ export default function CelebritiesClient() {
               />
               <button
                 type="submit"
-                className="bg-yellow-400 text-black px-6 py-3 rounded-full text-sm font-bold hover:bg-yellow-300 transition"
+                className="bg-yellow-400 text-black px-6 py-3 rounded-full text-sm font-black hover:bg-yellow-300 transition"
               >
                 Search
               </button>
@@ -96,9 +97,9 @@ export default function CelebritiesClient() {
                 <button
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition ${
+                  className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition ${
                     activeCategory === cat
-                      ? "bg-yellow-400 text-black font-bold"
+                      ? "bg-yellow-400 text-black"
                       : "bg-zinc-900 text-gray-400 hover:text-yellow-400 hover:bg-zinc-800"
                   }`}
                 >
@@ -125,7 +126,7 @@ export default function CelebritiesClient() {
             ) : celebrities.length === 0 ? (
               <div className="text-center py-20">
                 <p className="text-5xl mb-4">🔍</p>
-                <h3 className="text-xl font-bold text-white mb-2">No celebrities found</h3>
+                <h3 className="text-xl font-black text-white mb-2">No celebrities found</h3>
                 <p className="text-gray-500 text-sm">Try a different search or category.</p>
               </div>
             ) : (
@@ -136,6 +137,7 @@ export default function CelebritiesClient() {
                     href={`/celebrities/${celeb.slug}`}
                     className="group bg-zinc-900 rounded-2xl overflow-hidden border border-yellow-400/20 hover:border-yellow-400/60 transition-all duration-300"
                   >
+                    {/* Image */}
                     <div className="relative h-64 w-full overflow-hidden">
                       <Image
                         src={celeb.photo || PLACEHOLDER}
@@ -144,18 +146,34 @@ export default function CelebritiesClient() {
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                         className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
                       />
-                      {celeb.featured && (
-                        <span className="absolute top-3 left-3 bg-yellow-400 text-black text-xs px-3 py-1 rounded-full font-bold">
-                          ⭐ Featured
-                        </span>
+                      {/* Badges */}
+                      <div className="absolute top-3 left-3 flex items-center gap-2">
+                        {celeb.featured && (
+                          <span className="bg-yellow-400 text-black text-xs px-3 py-1 rounded-full font-black">
+                            ⭐ Featured
+                          </span>
+                        )}
+                      </div>
+                      {/* Verified badge on image */}
+                      {celeb.verified && (
+                        <div className="absolute top-3 right-3">
+                          <VerifiedBadge size="md" />
+                        </div>
                       )}
                     </div>
+
+                    {/* Info */}
                     <div className="p-5">
-                      <h3 className="text-base font-bold text-white mb-1">{celeb.name}</h3>
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <h3 className="text-base font-black text-white">
+                          {celeb.name}
+                        </h3>
+                        {celeb.verified && <VerifiedBadge size="sm" />}
+                      </div>
                       <p className="text-gray-500 text-xs mb-3">{celeb.category}</p>
                       <div className="flex items-center justify-between">
                         {getLowestPrice(celeb.bookingTypes) ? (
-                          <p className="text-yellow-400 font-semibold text-sm">
+                          <p className="text-yellow-400 font-bold text-sm">
                             From ${getLowestPrice(celeb.bookingTypes)}
                           </p>
                         ) : (
