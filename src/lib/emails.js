@@ -49,7 +49,8 @@ export async function sendBookingConfirmationEmail({
               <h2 style="color:#ffffff;font-size:20px;margin:0 0 8px;font-weight:900;">Booking Received! ✅</h2>
               <p style="color:#9ca3af;font-size:14px;margin:0 0 24px;line-height:1.6;">
                 Hi ${userName}, your booking request has been successfully submitted.
-                Our team will review and confirm your booking shortly.
+                Our team will review your request and reach out to you shortly with
+                further instructions.
               </p>
 
               <!-- Booking Details -->
@@ -91,37 +92,35 @@ export async function sendBookingConfirmationEmail({
                 <p style="color:#FFD700;font-size:36px;font-weight:900;margin:0;">$${Number(amount).toLocaleString()}</p>
               </div>
 
-              <!-- Payment Instructions -->
-              <div style="border:1px solid #333;border-radius:12px;padding:20px;margin-bottom:24px;">
-                <h3 style="color:#FFD700;font-size:13px;font-weight:700;margin:0 0 12px;">📧 Payment Instructions</h3>
-                <p style="color:#9ca3af;font-size:13px;margin:0 0 12px;line-height:1.6;">
-                  To complete your booking, please make payment of
-                  <strong style="color:#FFD700;">$${Number(amount).toLocaleString()}</strong>
-                  using the following details:
-                </p>
-                <div style="background:#1a1a1a;border-radius:8px;padding:16px;">
-                  <p style="color:#ffffff;font-size:13px;margin:0 0 8px;"><strong style="color:#FFD700;">Bank:</strong> Chase Bank</p>
-                  <p style="color:#ffffff;font-size:13px;margin:0 0 8px;"><strong style="color:#FFD700;">Account Name:</strong> Gigceleb Inc.</p>
-                  <p style="color:#ffffff;font-size:13px;margin:0 0 8px;"><strong style="color:#FFD700;">Account Number:</strong> 1234567890</p>
-                  <p style="color:#ffffff;font-size:13px;margin:0;"><strong style="color:#FFD700;">Routing Number:</strong> 021000021</p>
-                </div>
-                <p style="color:#9ca3af;font-size:12px;margin:12px 0 0;line-height:1.6;">
-                  Please use your email address as the payment reference.
-                  Your booking will be confirmed once payment is received.
-                </p>
-              </div>
-
               <!-- What's Next -->
-              <div style="margin-bottom:24px;">
-                <h3 style="color:#ffffff;font-size:13px;font-weight:700;margin:0 0 12px;">What happens next:</h3>
-                ${["Complete payment using the details above", "Our team verifies your payment within 24 hours", "You receive a booking confirmation email", "Enjoy your exclusive celebrity experience! 🌟"].map((step, i) => `
-                  <div style="display:flex;align-items:flex-start;gap:12px;padding:8px 0;">
-                    <div style="width:24px;height:24px;background:#FFD700;border-radius:50%;display:inline-block;text-align:center;line-height:24px;flex-shrink:0;">
+              <div style="background:#1a1a1a;border-radius:12px;padding:20px;margin-bottom:24px;border:1px solid #333;">
+                <h3 style="color:#FFD700;font-size:12px;font-weight:700;margin:0 0 16px;text-transform:uppercase;letter-spacing:0.1em;">
+                  What happens next
+                </h3>
+                ${[
+                  "Our team reviews your booking request",
+                  "We will contact you via email with payment instructions",
+                  "Complete payment once you receive our email",
+                  "Your booking is confirmed after payment is verified",
+                  "Enjoy your exclusive celebrity experience! 🌟"
+                ].map((step, i) => `
+                  <div style="display:flex;align-items:flex-start;gap:12px;padding:6px 0;">
+                    <div style="width:22px;height:22px;background:#FFD700;border-radius:50%;display:inline-block;text-align:center;line-height:22px;flex-shrink:0;">
                       <span style="color:#000;font-size:11px;font-weight:900;">${i + 1}</span>
                     </div>
                     <p style="color:#9ca3af;font-size:13px;margin:0;line-height:1.5;">${step}</p>
                   </div>
                 `).join("")}
+              </div>
+
+              <!-- Warning Note -->
+              <div style="border-left:3px solid #FFD700;padding-left:16px;margin-bottom:24px;">
+                <p style="color:#9ca3af;font-size:13px;margin:0;line-height:1.6;">
+                  <strong style="color:#FFD700;">Please note:</strong> Payment details will be sent
+                  to you separately by our team. Do not send any payment until you receive
+                  official instructions from us at
+                  <a href="mailto:support@gigceleb.com" style="color:#FFD700;">support@gigceleb.com</a>.
+                </p>
               </div>
 
               <!-- CTA -->
