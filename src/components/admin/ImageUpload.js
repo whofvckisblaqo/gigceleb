@@ -5,20 +5,18 @@ import Image from "next/image";
 export default function ImageUpload({ label, value, onChange, hint }) {
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState("");
-  const [activeTab, setActiveTab] = useState("upload"); // "upload" or "url"
+  const [activeTab, setActiveTab] = useState("upload");
   const fileInputRef = useRef(null);
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Validate file type
     if (!file.type.startsWith("image/")) {
       setUploadError("Please select an image file");
       return;
     }
 
-    // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       setUploadError("Image must be less than 5MB");
       return;
@@ -53,7 +51,7 @@ export default function ImageUpload({ label, value, onChange, hint }) {
 
   return (
     <div>
-      <label className="text-sm font-medium text-gray-700 block mb-1">
+      <label className="text-sm font-medium text-gray-300 block mb-2">
         {label}
       </label>
 
@@ -62,10 +60,10 @@ export default function ImageUpload({ label, value, onChange, hint }) {
         <button
           type="button"
           onClick={() => setActiveTab("upload")}
-          className={`px-4 py-2 rounded-full text-xs font-medium transition ${
+          className={`px-4 py-2 rounded-full text-xs font-bold transition ${
             activeTab === "upload"
-              ? "bg-black text-white"
-              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              ? "bg-yellow-400 text-black"
+              : "bg-zinc-800 text-gray-400 hover:text-yellow-400"
           }`}
         >
           📁 Upload Photo
@@ -73,10 +71,10 @@ export default function ImageUpload({ label, value, onChange, hint }) {
         <button
           type="button"
           onClick={() => setActiveTab("url")}
-          className={`px-4 py-2 rounded-full text-xs font-medium transition ${
+          className={`px-4 py-2 rounded-full text-xs font-bold transition ${
             activeTab === "url"
-              ? "bg-black text-white"
-              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              ? "bg-yellow-400 text-black"
+              : "bg-zinc-800 text-gray-400 hover:text-yellow-400"
           }`}
         >
           🔗 Paste URL
@@ -90,35 +88,28 @@ export default function ImageUpload({ label, value, onChange, hint }) {
             onClick={() => fileInputRef.current?.click()}
             className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition ${
               uploading
-                ? "border-gray-200 bg-gray-50"
-                : "border-gray-300 hover:border-black hover:bg-gray-50"
+                ? "border-zinc-700 bg-zinc-800/50"
+                : "border-zinc-700 hover:border-yellow-400/50 hover:bg-yellow-400/5"
             }`}
           >
             {uploading ? (
               <div>
                 <p className="text-2xl mb-2">⏳</p>
-                <p className="text-sm text-gray-500">Uploading...</p>
+                <p className="text-sm text-gray-400">Uploading...</p>
               </div>
             ) : value ? (
               <div>
                 <p className="text-2xl mb-2">✅</p>
-                <p className="text-sm text-gray-500">
-                  Photo uploaded! Click to change.
-                </p>
+                <p className="text-sm text-gray-400">Photo uploaded! Click to change.</p>
               </div>
             ) : (
               <div>
                 <p className="text-2xl mb-2">📸</p>
-                <p className="text-sm font-medium text-gray-700">
-                  Click to upload photo
-                </p>
-                <p className="text-xs text-gray-400 mt-1">
-                  JPG, PNG, WEBP — Max 5MB
-                </p>
+                <p className="text-sm font-semibold text-gray-300">Click to upload photo</p>
+                <p className="text-xs text-gray-500 mt-1">JPG, PNG, WEBP — Max 5MB</p>
               </div>
             )}
           </div>
-
           <input
             ref={fileInputRef}
             type="file"
@@ -136,24 +127,24 @@ export default function ImageUpload({ label, value, onChange, hint }) {
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder="https://example.com/photo.jpg"
-          className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-black transition"
+          className="w-full bg-zinc-800 border border-zinc-700 focus:border-yellow-400 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none transition"
         />
       )}
 
       {/* Error */}
       {uploadError && (
-        <p className="text-red-500 text-xs mt-1">{uploadError}</p>
+        <p className="text-red-400 text-xs mt-1">{uploadError}</p>
       )}
 
       {/* Hint */}
       {hint && !uploadError && (
-        <p className="text-gray-400 text-xs mt-1">{hint}</p>
+        <p className="text-gray-500 text-xs mt-1">{hint}</p>
       )}
 
       {/* Preview */}
       {value && (
         <div className="mt-3 flex items-center gap-3">
-          <div className="relative w-16 h-16 rounded-xl overflow-hidden border border-gray-200 flex-shrink-0">
+          <div className="relative w-16 h-16 rounded-xl overflow-hidden border border-yellow-400/20 flex-shrink-0">
             <Image
               src={value}
               alt="Preview"
@@ -167,7 +158,7 @@ export default function ImageUpload({ label, value, onChange, hint }) {
             <button
               type="button"
               onClick={() => onChange("")}
-              className="text-xs text-red-500 hover:text-red-700 mt-1"
+              className="text-xs text-red-400 hover:text-red-300 mt-1"
             >
               Remove
             </button>

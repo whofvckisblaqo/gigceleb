@@ -14,14 +14,8 @@ const bookingTypes = [
 ];
 
 const categories = [
-  "Music",
-  "Film",
-  "Sports",
-  "Comedy",
-  "Media",
-  "Fashion",
-  "Business",
-  "Politics",
+  "Music", "Film", "Sports", "Comedy",
+  "Media", "Fashion", "Business", "Politics",
 ];
 
 export default function AddCelebrityForm() {
@@ -109,50 +103,52 @@ export default function AddCelebrityForm() {
     }
   };
 
+  const inputClass = "w-full bg-zinc-800 border border-zinc-700 focus:border-yellow-400 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none transition";
+  const labelClass = "text-sm font-medium text-gray-300 block mb-1";
+  const cardClass = "bg-zinc-900 border border-yellow-400/10 rounded-2xl p-6";
+
   return (
     <div className="max-w-4xl mx-auto">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-black">
+          <p className="text-yellow-400 text-xs uppercase tracking-widest font-bold mb-1">
+            Management
+          </p>
+          <h1 className="text-2xl sm:text-3xl font-black text-white">
             Add Celebrity
           </h1>
-          <p className="text-gray-500 mt-1 text-sm">
-            Fill in the details to add a new celebrity to StarReach.
-          </p>
         </div>
         <Link
           href="/admin/celebrities"
-          className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-black transition"
+          className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-yellow-400 transition"
         >
           ← Back to Celebrities
         </Link>
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded-xl mb-6">
+        <div className="bg-red-400/10 border border-red-400/30 text-red-400 text-sm px-4 py-3 rounded-xl mb-6">
           {error}
         </div>
       )}
 
       {success && (
-        <div className="bg-green-50 border border-green-200 text-green-600 text-sm px-4 py-3 rounded-xl mb-6">
+        <div className="bg-green-400/10 border border-green-400/30 text-green-400 text-sm px-4 py-3 rounded-xl mb-6">
           {success}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-8">
+      <form onSubmit={handleSubmit} className="space-y-6">
 
         {/* Basic Info */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6">
-          <h2 className="text-lg font-bold text-black mb-6">
+        <div className={cardClass}>
+          <h2 className="text-lg font-black text-white mb-6">
             Basic Information
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
-              <label className="text-sm font-medium text-gray-700 block mb-1">
-                Full Name *
-              </label>
+              <label className={labelClass}>Full Name *</label>
               <input
                 type="text"
                 name="name"
@@ -160,14 +156,12 @@ export default function AddCelebrityForm() {
                 onChange={handleNameChange}
                 placeholder="e.g. Beyoncé"
                 required
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-black transition"
+                className={inputClass}
               />
             </div>
 
             <div>
-              <label className="text-sm font-medium text-gray-700 block mb-1">
-                Slug (auto-generated)
-              </label>
+              <label className={labelClass}>Slug (auto-generated)</label>
               <input
                 type="text"
                 name="slug"
@@ -175,63 +169,55 @@ export default function AddCelebrityForm() {
                 onChange={handleChange}
                 placeholder="e.g. beyonce"
                 required
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-black transition bg-gray-50"
+                className={inputClass}
               />
             </div>
 
             <div>
-              <label className="text-sm font-medium text-gray-700 block mb-1">
-                Category *
-              </label>
+              <label className={labelClass}>Category *</label>
               <select
                 name="category"
                 value={form.category}
                 onChange={handleChange}
                 required
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-black transition"
+                className={inputClass}
               >
-                <option value="">Select category</option>
+                <option value="" className="bg-zinc-800">Select category</option>
                 {categories.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
-                  </option>
+                  <option key={cat} value={cat} className="bg-zinc-800">{cat}</option>
                 ))}
               </select>
             </div>
 
             <div>
-              <label className="text-sm font-medium text-gray-700 block mb-1">
-                Nationality
-              </label>
+              <label className={labelClass}>Nationality</label>
               <input
                 type="text"
                 name="nationality"
                 value={form.nationality}
                 onChange={handleChange}
                 placeholder="e.g. American"
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-black transition"
+                className={inputClass}
               />
             </div>
 
             <div className="sm:col-span-2">
-              <label className="text-sm font-medium text-gray-700 block mb-1">
-                Bio
-              </label>
+              <label className={labelClass}>Bio</label>
               <textarea
                 name="bio"
                 value={form.bio}
                 onChange={handleChange}
                 placeholder="Write a short biography..."
                 rows={4}
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-black transition resize-none"
+                className={`${inputClass} resize-none`}
               />
             </div>
           </div>
         </div>
 
         {/* Images */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6">
-          <h2 className="text-lg font-bold text-black mb-6">Images</h2>
+        <div className={cardClass}>
+          <h2 className="text-lg font-black text-white mb-6">Images</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <ImageUpload
               label="Celebrity Photo *"
@@ -242,31 +228,29 @@ export default function AddCelebrityForm() {
             <ImageUpload
               label="Cover Image"
               value={form.coverImage}
-              onChange={(url) =>
-                setForm((prev) => ({ ...prev, coverImage: url }))
-              }
+              onChange={(url) => setForm((prev) => ({ ...prev, coverImage: url }))}
               hint="Banner image shown at top of celebrity profile"
             />
           </div>
         </div>
 
         {/* Booking Types */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6">
-          <h2 className="text-lg font-bold text-black mb-2">
+        <div className={cardClass}>
+          <h2 className="text-lg font-black text-white mb-2">
             Booking Types & Pricing
           </h2>
-          <p className="text-gray-400 text-sm mb-6">
+          <p className="text-gray-500 text-sm mb-6">
             Enable booking types and set prices for this celebrity.
           </p>
 
-          <div className="space-y-4">
+          <div className="space-y-3">
             {bookingTypes.map((type) => (
               <div
                 key={type.key}
                 className={`border rounded-xl p-4 transition ${
                   form.bookingTypes[type.key].available
-                    ? "border-black bg-gray-50"
-                    : "border-gray-200"
+                    ? "border-yellow-400/50 bg-yellow-400/5"
+                    : "border-zinc-700 bg-zinc-800/50"
                 }`}
               >
                 <div className="flex flex-col sm:flex-row sm:items-center gap-4">
@@ -276,17 +260,13 @@ export default function AddCelebrityForm() {
                       id={type.key}
                       checked={form.bookingTypes[type.key].available}
                       onChange={(e) =>
-                        handleBookingTypeChange(
-                          type.key,
-                          "available",
-                          e.target.checked
-                        )
+                        handleBookingTypeChange(type.key, "available", e.target.checked)
                       }
-                      className="w-4 h-4 cursor-pointer"
+                      className="w-4 h-4 cursor-pointer accent-yellow-400"
                     />
                     <label
                       htmlFor={type.key}
-                      className="text-sm font-medium text-black cursor-pointer"
+                      className="text-sm font-semibold text-white cursor-pointer"
                     >
                       {type.icon} {type.label}
                     </label>
@@ -294,21 +274,17 @@ export default function AddCelebrityForm() {
 
                   {form.bookingTypes[type.key].available && (
                     <div className="flex items-center gap-2">
-                      <span className="text-sm text-gray-500">$</span>
+                      <span className="text-sm text-gray-400">$</span>
                       <input
                         type="number"
                         value={form.bookingTypes[type.key].price}
                         onChange={(e) =>
-                          handleBookingTypeChange(
-                            type.key,
-                            "price",
-                            e.target.value
-                          )
+                          handleBookingTypeChange(type.key, "price", e.target.value)
                         }
                         placeholder="Price in USD"
                         min="0"
                         required
-                        className="border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-black transition w-40"
+                        className="bg-zinc-700 border border-zinc-600 focus:border-yellow-400 rounded-xl px-4 py-2 text-sm text-white placeholder-gray-500 focus:outline-none transition w-40"
                       />
                     </div>
                   )}
@@ -319,8 +295,8 @@ export default function AddCelebrityForm() {
         </div>
 
         {/* Settings */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6">
-          <h2 className="text-lg font-bold text-black mb-6">Settings</h2>
+        <div className={cardClass}>
+          <h2 className="text-lg font-black text-white mb-6">Settings</h2>
           <div className="flex flex-col sm:flex-row gap-6">
             <label className="flex items-center gap-3 cursor-pointer">
               <input
@@ -328,15 +304,11 @@ export default function AddCelebrityForm() {
                 name="featured"
                 checked={form.featured}
                 onChange={handleChange}
-                className="w-4 h-4"
+                className="w-4 h-4 accent-yellow-400"
               />
               <div>
-                <p className="text-sm font-medium text-black">
-                  Featured Celebrity
-                </p>
-                <p className="text-xs text-gray-400">
-                  Show on homepage featured section
-                </p>
+                <p className="text-sm font-semibold text-white">Featured Celebrity</p>
+                <p className="text-xs text-gray-500">Show on homepage featured section</p>
               </div>
             </label>
 
@@ -346,15 +318,11 @@ export default function AddCelebrityForm() {
                 name="available"
                 checked={form.available}
                 onChange={handleChange}
-                className="w-4 h-4"
+                className="w-4 h-4 accent-yellow-400"
               />
               <div>
-                <p className="text-sm font-medium text-black">
-                  Available for Booking
-                </p>
-                <p className="text-xs text-gray-400">
-                  Make this celebrity bookable
-                </p>
+                <p className="text-sm font-semibold text-white">Available for Booking</p>
+                <p className="text-xs text-gray-500">Make this celebrity bookable</p>
               </div>
             </label>
           </div>
@@ -365,13 +333,13 @@ export default function AddCelebrityForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full sm:w-auto bg-black text-white px-10 py-4 rounded-full text-sm font-semibold hover:bg-gray-800 transition disabled:opacity-50"
+            className="w-full sm:w-auto bg-yellow-400 text-black px-10 py-4 rounded-full text-sm font-black hover:bg-yellow-300 transition disabled:opacity-50"
           >
             {loading ? "Adding Celebrity..." : "Add Celebrity"}
           </button>
           <Link
             href="/admin/celebrities"
-            className="w-full sm:w-auto border border-black text-black px-10 py-4 rounded-full text-sm font-semibold hover:bg-black hover:text-white transition text-center"
+            className="w-full sm:w-auto border border-yellow-400/30 text-gray-400 px-10 py-4 rounded-full text-sm font-semibold hover:border-yellow-400 hover:text-yellow-400 transition text-center"
           >
             Cancel
           </Link>
