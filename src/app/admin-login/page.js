@@ -14,13 +14,12 @@ export default function AdminLoginPage() {
     setError("");
     setLoading(true);
 
-    const result = await signIn("credentials", {
-      email: "admin@starreach.com",
-      password,
-      isAdmin: "true",
-      redirect: false,
-    });
-
+   const result = await signIn("credentials", {
+  email: "admin@gigceleb.com",
+  password,
+  isAdmin: "true",
+  redirect: false,
+});
     if (result?.error) {
       setError("Invalid password. Please try again.");
       setLoading(false);
