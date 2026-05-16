@@ -4,288 +4,322 @@ import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import Link from "next/link";
 
-const faqs = [
+const faqCategories = [
   {
-    category: "Bookings",
-    questions: [
+    category: "General",
+    icon: "⭐",
+    faqs: [
       {
-        question: "How do I book a celebrity on StarReach?",
-        answer:
-          "Simply browse our celebrity roster, click on your favorite celebrity, select a booking type, fill in your details and confirm your booking. Our team will send you payment instructions via email within 24 hours.",
+        question: "What is Gigceleb?",
+        answer: "Gigceleb is a premium celebrity booking platform that connects fans, brands, and event planners with the world's biggest names in entertainment. We offer 6 exclusive booking types tailored to every occasion.",
       },
       {
+        question: "How does Gigceleb work?",
+        answer: "Simply browse our roster of A-list celebrities, select your preferred booking type, fill in your details, and submit your booking. Our team will review and confirm your booking within 24-48 hours.",
+      },
+      {
+        question: "Is Gigceleb available across the US?",
+        answer: "Yes! Gigceleb operates across all 50 US states. We connect clients with celebrities for events, appearances, and experiences nationwide.",
+      },
+      {
+        question: "Do I need an account to book?",
+        answer: "Yes, you need a free Gigceleb account to make a booking. Creating an account only takes a minute and allows you to track and manage all your bookings in one place.",
+      },
+    ],
+  },
+  {
+    category: "Bookings",
+    icon: "📅",
+    faqs: [
+      {
         question: "How long does it take to confirm a booking?",
-        answer:
-          "Most bookings are confirmed within 24–48 hours after payment is received. For event appearances and product endorsements, it may take up to 5 business days due to scheduling coordination.",
+        answer: "Most bookings are confirmed within 24–48 hours. For event appearances and product endorsements, it may take up to 5 business days as we coordinate with the celebrity's management team.",
       },
       {
         question: "Can I cancel or reschedule a booking?",
-        answer:
-          "Yes. Cancellations made 7 days before the scheduled date are fully refundable. Rescheduling is available up to 48 hours before the event. Contact us at support@starreach.com to make changes.",
+        answer: "Yes. Cancellations made 7 or more days before the scheduled date are fully refundable. Rescheduling is available up to 48 hours before the event, subject to celebrity availability.",
       },
       {
-        question: "What happens after I confirm my booking?",
-        answer:
-          "After confirming your booking, you will receive an email with payment instructions. Once payment is received and verified, your booking will be confirmed and you'll receive a final confirmation email.",
+        question: "Can I request a celebrity not listed on Gigceleb?",
+        answer: "Absolutely! Contact our team with the celebrity's name and your requirements. We'll do our best to reach out to their management team on your behalf.",
       },
       {
-        question: "Can I book multiple celebrities at once?",
-        answer:
-          "Yes! You can make separate bookings for as many celebrities as you'd like. Each booking is handled individually and you'll receive separate confirmation emails for each.",
+        question: "What happens after I submit a booking?",
+        answer: "Once submitted, our team reviews your request and reaches out to the celebrity's team. You'll receive a confirmation email with payment instructions within 24-48 hours.",
       },
     ],
   },
   {
     category: "Payments",
-    questions: [
+    icon: "💰",
+    faqs: [
       {
         question: "How is payment handled?",
-        answer:
-          "After your booking is submitted, our team will send you payment instructions via email. Payment details including bank account information will be included in that email. Your booking is confirmed once payment is received and verified.",
+        answer: "After your booking is confirmed, our team will send you payment instructions via email with the account details to complete the transaction. Your booking is fully confirmed once payment is received.",
       },
       {
-        question: "What currencies do you accept?",
-        answer:
-          "All bookings are priced and processed in US Dollars (USD). International bank transfers are accepted.",
+        question: "What payment methods are accepted?",
+        answer: "We accept bank transfers, wire transfers, and other payment methods depending on your location. Our team will provide the most convenient payment option for you in the confirmation email.",
       },
       {
         question: "Is my payment secure?",
-        answer:
-          "Yes. All payment instructions are sent via encrypted email and our team manually verifies every transaction. We never store your payment details on our servers.",
+        answer: "Yes, all payments are processed securely. We use industry-standard encryption and security protocols to protect your financial information.",
       },
       {
         question: "Can I get a refund?",
-        answer:
-          "Refunds are available for cancellations made at least 7 days before the scheduled booking date. Refunds are processed within 5–10 business days. Please contact support@starreach.com to request a refund.",
+        answer: "Refunds are available for cancellations made 7 or more days before the scheduled date. Cancellations within 7 days may be subject to a cancellation fee. Contact our support team for assistance.",
       },
     ],
   },
   {
     category: "Celebrities",
-    questions: [
+    icon: "🌟",
+    faqs: [
       {
-        question: "Are all celebrities on StarReach verified?",
-        answer:
-          "Yes. Every celebrity on StarReach is manually verified by our talent team before being listed on the platform. We work directly with their management teams to ensure authenticity.",
+        question: "Are all celebrities on Gigceleb verified?",
+        answer: "Yes. Every celebrity listed on Gigceleb is manually verified by our talent team before being added to the platform. We work directly with their management teams to ensure authenticity.",
       },
       {
-        question: "Can I request a celebrity not listed on the platform?",
-        answer:
-          "Absolutely! Contact us at support@starreach.com with the celebrity's name and we'll do our best to reach out to their management team on your behalf.",
+        question: "How are celebrity prices determined?",
+        answer: "Prices are set based on the celebrity's demand, availability, and the type of booking requested. Prices may vary depending on the specific requirements of your booking.",
+      },
+      {
+        question: "Can I see a celebrity's availability before booking?",
+        answer: "You can submit a booking request with your preferred date. Our team will confirm availability and provide alternative dates if the celebrity is not available on your preferred date.",
       },
       {
         question: "What categories of celebrities are available?",
-        answer:
-          "We have celebrities across Music, Film, Sports, Comedy, Media, Fashion, Business and Politics. Our roster is constantly growing with new additions every week.",
-      },
-      {
-        question: "Can celebrities decline a booking request?",
-        answer:
-          "Yes. In rare cases, a celebrity may decline a booking due to scheduling conflicts or personal reasons. In such cases, you will receive a full refund and we'll suggest similar alternatives.",
+        answer: "We feature celebrities across Music, Film, Sports, Comedy, Media, Fashion, Business, and Politics. Our roster is constantly growing with new additions every week.",
       },
     ],
   },
   {
     category: "Account",
-    questions: [
-      {
-        question: "Do I need an account to book a celebrity?",
-        answer:
-          "Yes. You need to create a free StarReach account to make bookings. This allows you to track your bookings, receive updates, and manage your history.",
-      },
+    icon: "👤",
+    faqs: [
       {
         question: "How do I create an account?",
-        answer:
-          "Click 'Sign Up' at the top of the page, enter your name, email and password, and you're good to go! Account creation is completely free.",
+        answer: "Click the 'Sign Up' button on the top right of the page. Fill in your name, email, phone, country and create a password. You'll receive a verification code to confirm your email address.",
       },
       {
         question: "I forgot my password. What do I do?",
-        answer:
-          "Click 'Forgot Password' on the login page and follow the instructions. If you're still having trouble, contact us at support@starreach.com and we'll help you regain access.",
+        answer: "Click 'Forgot Password' on the login page and enter your email address. We'll send you a link to reset your password.",
       },
       {
-        question: "Can I change my email address?",
-        answer:
-          "Currently, email address changes must be done manually. Contact us at support@starreach.com with your request and our team will update your account.",
-      },
-    ],
-  },
-  {
-    category: "VIP Membership",
-    questions: [
-      {
-        question: "What is a VIP Membership Card?",
-        answer:
-          "A VIP Membership gives you exclusive perks including priority booking, early access to celebrity events, members-only content, special discounts on all bookings, and monthly celebrity newsletters.",
+        question: "How do I track my bookings?",
+        answer: "All your bookings are visible in your Dashboard after logging in. You can see the status of each booking — pending, confirmed, completed or cancelled.",
       },
       {
-        question: "How do I get a VIP Membership?",
-        answer:
-          "You can book a VIP Membership directly from any celebrity's profile page. Select 'VIP Membership Card' as your booking type and follow the checkout process.",
-      },
-      {
-        question: "Can I cancel my VIP Membership?",
-        answer:
-          "Yes. You can cancel your VIP Membership at any time. Your benefits will continue until the end of the current billing period. Contact support@starreach.com to cancel.",
+        question: "Can I update my account information?",
+        answer: "Yes. Log in and go to your Dashboard where you can update your profile information including your name, phone number, and country.",
       },
     ],
   },
 ];
 
 export default function FAQPage() {
-  const [openItem, setOpenItem] = useState(null);
-  const [activeCategory, setActiveCategory] = useState("All");
+  const [openCategory, setOpenCategory] = useState(0);
+  const [openFaq, setOpenFaq] = useState(null);
+  const [search, setSearch] = useState("");
 
-  const categories = ["All", ...faqs.map((f) => f.category)];
-
-  const filteredFaqs =
-    activeCategory === "All"
-      ? faqs
-      : faqs.filter((f) => f.category === activeCategory);
-
-  const totalQuestions = faqs.reduce(
-    (sum, cat) => sum + cat.questions.length,
-    0
-  );
+  const filteredCategories = faqCategories.map((cat) => ({
+    ...cat,
+    faqs: cat.faqs.filter(
+      (faq) =>
+        faq.question.toLowerCase().includes(search.toLowerCase()) ||
+        faq.answer.toLowerCase().includes(search.toLowerCase())
+    ),
+  })).filter((cat) => cat.faqs.length > 0);
 
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-white pt-24">
+      <main className="min-h-screen bg-black pt-24">
 
         {/* Hero */}
-        <section className="bg-black py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto text-center">
-            <p className="uppercase tracking-widest text-xs text-gray-400 mb-3">
-              Help Center
+        <section className="relative bg-zinc-950 border-b border-yellow-400/20 py-20 sm:py-28 px-4 sm:px-6 lg:px-8 overflow-hidden">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-yellow-400/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-yellow-400/5 rounded-full blur-3xl" />
+          <div className="max-w-4xl mx-auto text-center relative z-10">
+            <p className="uppercase tracking-widest text-xs text-yellow-400 mb-3 font-bold">
+              — Help Center
             </p>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4">
-              Frequently Asked Questions
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-white mb-6 leading-tight">
+              Frequently Asked <span className="text-yellow-400">Questions</span>
             </h1>
-            <p className="text-gray-400 text-base sm:text-lg max-w-xl mx-auto">
-              Find answers to the most common questions about StarReach.
-              Can't find what you're looking for?{" "}
-              <Link href="/contact" className="text-white underline">
-                Contact us
-              </Link>
-              .
+            <p className="text-gray-400 text-base sm:text-lg max-w-xl mx-auto mb-8">
+              Find quick answers to the most common questions about Gigceleb.
             </p>
-          </div>
-        </section>
 
-        {/* Stats */}
-        <section className="border-b border-gray-100 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto py-6 flex flex-wrap gap-6 items-center justify-between">
-            <p className="text-gray-500 text-sm">
-              <span className="font-bold text-black">{totalQuestions}</span>{" "}
-              questions across{" "}
-              <span className="font-bold text-black">{faqs.length}</span>{" "}
-              categories
-            </p>
-            {/* Category Filter */}
-            <div className="flex flex-wrap gap-2">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setActiveCategory(cat)}
-                  className={`px-4 py-1.5 rounded-full text-xs font-medium transition ${
-                    activeCategory === cat
-                      ? "bg-black text-white"
-                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
+            {/* Search */}
+            <div className="max-w-lg mx-auto">
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => { setSearch(e.target.value); setOpenFaq(null); }}
+                placeholder="Search questions..."
+                className="w-full bg-zinc-900 border border-yellow-400/30 focus:border-yellow-400 text-white placeholder-gray-500 rounded-full px-6 py-4 text-sm focus:outline-none transition"
+              />
             </div>
           </div>
         </section>
 
         {/* FAQ Content */}
-        <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto space-y-10">
-            {filteredFaqs.map((section, sectionIndex) => (
-              <div key={sectionIndex}>
-                {/* Category Title */}
-                <h2 className="text-lg font-bold text-black mb-4 flex items-center gap-2">
-                  <span className="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">
-                    {section.questions.length}
-                  </span>
-                  {section.category}
-                </h2>
-
-                {/* Questions */}
-                <div className="space-y-3">
-                  {section.questions.map((item, itemIndex) => {
-                    const key = `${sectionIndex}-${itemIndex}`;
-                    const isOpen = openItem === key;
-
-                    return (
+        <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            {search ? (
+              // Search Results
+              <div className="max-w-3xl mx-auto space-y-4">
+                <p className="text-gray-400 text-sm mb-6">
+                  Showing results for <span className="text-yellow-400 font-semibold">"{search}"</span>
+                </p>
+                {filteredCategories.length === 0 ? (
+                  <div className="text-center py-16">
+                    <p className="text-4xl mb-4">🔍</p>
+                    <h3 className="text-lg font-black text-white mb-2">No results found</h3>
+                    <p className="text-gray-400 text-sm">Try a different search term.</p>
+                  </div>
+                ) : (
+                  filteredCategories.map((cat) =>
+                    cat.faqs.map((faq, i) => (
                       <div
-                        key={itemIndex}
-                        className={`border rounded-2xl overflow-hidden transition-all duration-200 ${
-                          isOpen
-                            ? "border-black"
-                            : "border-gray-200 hover:border-gray-300"
+                        key={i}
+                        className="bg-zinc-900 border border-yellow-400/10 hover:border-yellow-400/30 rounded-2xl overflow-hidden transition"
+                      >
+                        <button
+                          onClick={() => setOpenFaq(openFaq === `search-${i}` ? null : `search-${i}`)}
+                          className="w-full flex items-center justify-between px-6 py-4 text-left"
+                        >
+                          <div>
+                            <span className="text-yellow-400 text-xs font-bold uppercase tracking-wider block mb-1">
+                              {cat.icon} {cat.category}
+                            </span>
+                            <p className="font-bold text-white text-sm">{faq.question}</p>
+                          </div>
+                          <span className={`text-yellow-400 flex-shrink-0 text-xl ml-4 transition-transform duration-300 ${openFaq === `search-${i}` ? "rotate-45" : ""}`}>
+                            +
+                          </span>
+                        </button>
+                        {openFaq === `search-${i}` && (
+                          <div className="px-6 pb-5 border-t border-yellow-400/10">
+                            <p className="text-gray-400 text-sm leading-relaxed pt-4">{faq.answer}</p>
+                          </div>
+                        )}
+                      </div>
+                    ))
+                  )
+                )}
+              </div>
+            ) : (
+              // Category View
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+
+                {/* Category Tabs */}
+                <div className="lg:col-span-1">
+                  <div className="bg-zinc-900 border border-yellow-400/20 rounded-2xl p-4 sticky top-24">
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4 px-2">
+                      Categories
+                    </p>
+                    <div className="space-y-1">
+                      {faqCategories.map((cat, i) => (
+                        <button
+                          key={i}
+                          onClick={() => { setOpenCategory(i); setOpenFaq(null); }}
+                          className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-left transition ${
+                            openCategory === i
+                              ? "bg-yellow-400 text-black"
+                              : "text-gray-400 hover:bg-zinc-800 hover:text-yellow-400"
+                          }`}
+                        >
+                          <span>{cat.icon}</span>
+                          {cat.category}
+                          <span className={`ml-auto text-xs px-2 py-0.5 rounded-full ${
+                            openCategory === i ? "bg-black/20 text-black" : "bg-zinc-700 text-gray-400"
+                          }`}>
+                            {cat.faqs.length}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* FAQ List */}
+                <div className="lg:col-span-3">
+                  <div className="mb-6">
+                    <p className="uppercase tracking-widest text-xs text-yellow-400 mb-2 font-bold">
+                      — {faqCategories[openCategory].icon} {faqCategories[openCategory].category}
+                    </p>
+                    <h2 className="text-2xl sm:text-3xl font-black text-white">
+                      {faqCategories[openCategory].category} Questions
+                    </h2>
+                  </div>
+
+                  <div className="space-y-3">
+                    {faqCategories[openCategory].faqs.map((faq, i) => (
+                      <div
+                        key={i}
+                        className={`bg-zinc-900 border rounded-2xl overflow-hidden transition-all duration-300 ${
+                          openFaq === i
+                            ? "border-yellow-400/50"
+                            : "border-yellow-400/10 hover:border-yellow-400/30"
                         }`}
                       >
                         <button
-                          onClick={() =>
-                            setOpenItem(isOpen ? null : key)
-                          }
-                          className="w-full flex items-center justify-between px-5 sm:px-6 py-4 text-left"
+                          onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                          className="w-full flex items-center justify-between px-6 py-5 text-left"
                         >
-                          <p className="font-semibold text-black text-sm sm:text-base pr-4">
-                            {item.question}
+                          <p className="font-bold text-white text-sm sm:text-base pr-4">
+                            {faq.question}
                           </p>
                           <span
-                            className={`text-xl flex-shrink-0 transition-transform duration-200 ${
-                              isOpen ? "rotate-45" : ""
+                            className={`w-8 h-8 rounded-full border flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
+                              openFaq === i
+                                ? "bg-yellow-400 border-yellow-400 text-black rotate-45"
+                                : "border-yellow-400/30 text-yellow-400"
                             }`}
                           >
                             +
                           </span>
                         </button>
-                        {isOpen && (
-                          <div className="px-5 sm:px-6 pb-5">
-                            <p className="text-gray-500 text-sm leading-relaxed">
-                              {item.answer}
+                        {openFaq === i && (
+                          <div className="px-6 pb-5 border-t border-yellow-400/10">
+                            <p className="text-gray-400 text-sm leading-relaxed pt-4">
+                              {faq.answer}
                             </p>
                           </div>
                         )}
                       </div>
-                    );
-                  })}
+                    ))}
+                  </div>
                 </div>
               </div>
-            ))}
+            )}
           </div>
         </section>
 
-        {/* Still need help */}
-        <section className="py-12 sm:py-16 bg-gray-50 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl mx-auto text-center">
-            <p className="text-3xl mb-4">🤔</p>
-            <h2 className="text-2xl font-bold text-black mb-3">
-              Still have questions?
+        {/* Still have questions */}
+        <section className="py-16 sm:py-20 bg-zinc-950 border-t border-yellow-400/20 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-2xl sm:text-3xl font-black text-white mb-4">
+              Still Have <span className="text-yellow-400">Questions?</span>
             </h2>
-            <p className="text-gray-500 text-sm mb-6">
-              Can't find the answer you're looking for? Our support team is
-              happy to help.
+            <p className="text-gray-400 mb-8 text-sm sm:text-base">
+              Can't find what you're looking for? Our support team is ready to help!
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="mailto:support@gigceleb.com"
+                className="bg-yellow-400 text-black px-8 py-4 rounded-full text-sm font-black hover:bg-yellow-300 transition shadow-lg shadow-yellow-400/25"
+              >
+                Email Support
+              </a>
               <Link
                 href="/contact"
-                className="bg-black text-white px-8 py-3 rounded-full text-sm font-semibold hover:bg-gray-800 transition"
+                className="border border-yellow-400/50 text-white px-8 py-4 rounded-full text-sm font-semibold hover:border-yellow-400 hover:text-yellow-400 transition"
               >
-                Contact Support
+                Contact Us
               </Link>
-              <a
-                href="mailto:support@starreach.com"
-                className="border border-black text-black px-8 py-3 rounded-full text-sm font-semibold hover:bg-black hover:text-white transition"
-              >
-                Email Us
-              </a>
             </div>
           </div>
         </section>

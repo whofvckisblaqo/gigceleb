@@ -7,44 +7,56 @@ import Link from "next/link";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 
-const PLACEHOLDER = "https://placehold.co/400x500/f3f4f6/9ca3af?text=No+Photo";
+const PLACEHOLDER = "https://placehold.co/400x500/1a1a1a/FFD700?text=No+Photo";
 
 const bookingTypeLabels = {
   vipMembership: {
     label: "VIP Membership Card",
     icon: "👑",
     bg: "https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?w=800&q=80",
-    overlay: "bg-black/70",
+    overlay: "bg-yellow-900/80",
+    borderColor: "border-yellow-400/50",
+    priceColor: "text-yellow-400",
   },
   meetAndGreet: {
     label: "Meet & Greet",
     icon: "🤝",
     bg: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80",
-    overlay: "bg-rose-900/70",
+    overlay: "bg-rose-900/80",
+    borderColor: "border-rose-400/50",
+    priceColor: "text-rose-400",
   },
   eventAppearance: {
     label: "Event Appearance",
     icon: "🎤",
     bg: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80",
-    overlay: "bg-blue-900/70",
+    overlay: "bg-blue-900/80",
+    borderColor: "border-blue-400/50",
+    priceColor: "text-blue-400",
   },
   privateReservation: {
     label: "Private Reservation",
     icon: "🔒",
     bg: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&q=80",
-    overlay: "bg-gray-900/70",
+    overlay: "bg-gray-900/80",
+    borderColor: "border-gray-400/50",
+    priceColor: "text-gray-300",
   },
   productEndorsement: {
     label: "Product Endorsement",
     icon: "📣",
     bg: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80",
-    overlay: "bg-emerald-900/70",
+    overlay: "bg-emerald-900/80",
+    borderColor: "border-emerald-400/50",
+    priceColor: "text-emerald-400",
   },
   weeklyAppointment: {
     label: "Weekly Appointment",
     icon: "📅",
     bg: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=800&q=80",
-    overlay: "bg-purple-900/70",
+    overlay: "bg-purple-900/80",
+    borderColor: "border-purple-400/50",
+    priceColor: "text-purple-400",
   },
 };
 
@@ -83,14 +95,9 @@ export default function BookingClient({ params }) {
   const bookingLabel = bookingTypeLabels[bookingType];
 
   const handleBooking = async () => {
-    if (!session) {
-      router.push("/login");
-      return;
-    }
-
+    if (!session) { router.push("/login"); return; }
     setError("");
     setSubmitting(true);
-
     try {
       const res = await fetch("/api/bookings", {
         method: "POST",
@@ -103,14 +110,8 @@ export default function BookingClient({ params }) {
           scheduledDate: scheduledDate || null,
         }),
       });
-
       const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || "Failed to create booking");
-        return;
-      }
-
+      if (!res.ok) { setError(data.error || "Failed to create booking"); return; }
       setSuccess(true);
     } catch (error) {
       setError("Something went wrong. Please try again.");
@@ -123,10 +124,10 @@ export default function BookingClient({ params }) {
     return (
       <>
         <Navbar />
-        <div className="min-h-screen bg-white pt-24 flex items-center justify-center">
+        <div className="min-h-screen bg-black pt-24 flex items-center justify-center">
           <div className="animate-pulse text-center">
-            <div className="h-8 bg-gray-200 rounded w-48 mx-auto mb-4" />
-            <div className="h-4 bg-gray-200 rounded w-32 mx-auto" />
+            <div className="h-8 bg-zinc-800 rounded w-48 mx-auto mb-4" />
+            <div className="h-4 bg-zinc-800 rounded w-32 mx-auto" />
           </div>
         </div>
         <Footer />
@@ -138,64 +139,65 @@ export default function BookingClient({ params }) {
     return (
       <>
         <Navbar />
-        <div className="min-h-screen bg-white pt-24 pb-16 flex items-center justify-center px-4">
+        <div className="min-h-screen bg-black pt-24 pb-16 flex items-center justify-center px-4">
           <div className="max-w-lg w-full">
-            <div className="bg-white rounded-3xl border border-gray-100 shadow-lg p-8 sm:p-10 text-center">
+            <div className="bg-zinc-900 border border-yellow-400/20 rounded-3xl p-8 sm:p-10 text-center">
 
               {/* Icon */}
-              <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6">
+              <div className="w-20 h-20 bg-yellow-400/10 border border-yellow-400/30 rounded-full flex items-center justify-center mx-auto mb-6">
                 <span className="text-4xl">✅</span>
               </div>
 
-              <h1 className="text-2xl sm:text-3xl font-bold text-black mb-3">
+              <h1 className="text-2xl sm:text-3xl font-black text-white mb-3">
                 Booking Received!
               </h1>
 
-              <p className="text-gray-500 text-sm sm:text-base mb-6 leading-relaxed">
+              <p className="text-gray-400 text-sm sm:text-base mb-6 leading-relaxed">
                 Your booking request for{" "}
-                <span className="font-semibold text-black">
+                <span className="font-black text-yellow-400">
                   {bookingLabel?.icon} {bookingLabel?.label}
                 </span>{" "}
                 with{" "}
-                <span className="font-semibold text-black">
-                  {celebrity?.name}
-                </span>{" "}
+                <span className="font-black text-white">{celebrity?.name}</span>{" "}
                 has been successfully submitted.
               </p>
 
               {/* Payment Instructions */}
-              <div className="bg-gray-50 rounded-2xl p-5 sm:p-6 mb-6 text-left">
+              <div className="bg-zinc-800 border border-yellow-400/10 rounded-2xl p-5 sm:p-6 mb-6 text-left">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-xl">📧</span>
-                  <h3 className="font-bold text-black text-sm">
-                    Payment Instructions
-                  </h3>
+                  <h3 className="font-black text-white text-sm">Payment Instructions</h3>
                 </div>
-                <p className="text-gray-600 text-sm leading-relaxed">
+                <p className="text-gray-400 text-sm leading-relaxed">
                   An email will be sent to{" "}
-                  <span className="font-semibold text-black">
+                  <span className="font-bold text-yellow-400">
                     {session?.user?.email}
                   </span>{" "}
-                  with the payment account details and instructions to complete
-                  your booking payment.
+                  with payment account details and instructions to complete your booking.
                 </p>
               </div>
 
               {/* Amount Due */}
-              <div className="bg-black rounded-2xl p-5 mb-6">
-                <p className="text-gray-400 text-xs uppercase tracking-wider mb-1">
-                  Amount Due
-                </p>
-                <p className="text-white font-bold text-3xl">
-                  ${selectedBookingType?.price?.toLocaleString()}
-                </p>
+              <div
+                className="relative rounded-2xl overflow-hidden p-5 mb-6"
+                style={{
+                  backgroundImage: `url(${bookingLabel?.bg})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
+              >
+                <div className={`absolute inset-0 ${bookingLabel?.overlay}`} />
+                <div className="relative z-10">
+                  <p className="text-white/60 text-xs uppercase tracking-wider mb-1">Amount Due</p>
+                  <p className={`font-black text-3xl ${bookingLabel?.priceColor}`}>
+                    ${selectedBookingType?.price?.toLocaleString()}
+                  </p>
+                </div>
               </div>
 
               {/* What's Next */}
               <div className="text-left mb-8 space-y-3">
-                <p className="text-sm font-semibold text-black">
-                  What happens next:
-                </p>
+                <p className="text-sm font-black text-white">What happens next:</p>
                 {[
                   "Check your email inbox for payment details",
                   "Complete the payment using the provided account",
@@ -203,10 +205,10 @@ export default function BookingClient({ params }) {
                   "You'll receive a final confirmation email",
                 ].map((step, i) => (
                   <div key={i} className="flex items-start gap-3">
-                    <span className="w-5 h-5 rounded-full bg-black text-white text-xs flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="w-5 h-5 rounded-full bg-yellow-400 text-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5 font-black">
                       {i + 1}
                     </span>
-                    <p className="text-gray-500 text-sm">{step}</p>
+                    <p className="text-gray-400 text-sm">{step}</p>
                   </div>
                 ))}
               </div>
@@ -215,27 +217,23 @@ export default function BookingClient({ params }) {
               <div className="flex flex-col sm:flex-row gap-3">
                 <Link
                   href="/dashboard"
-                  className="flex-1 bg-black text-white px-6 py-3 rounded-full text-sm font-semibold hover:bg-gray-800 transition text-center"
+                  className="flex-1 bg-yellow-400 text-black px-6 py-3 rounded-full text-sm font-black hover:bg-yellow-300 transition text-center"
                 >
                   View My Bookings
                 </Link>
                 <Link
                   href="/celebrities"
-                  className="flex-1 border border-black text-black px-6 py-3 rounded-full text-sm font-semibold hover:bg-black hover:text-white transition text-center"
+                  className="flex-1 border border-yellow-400/30 text-gray-400 px-6 py-3 rounded-full text-sm font-semibold hover:border-yellow-400 hover:text-yellow-400 transition text-center"
                 >
                   Browse More
                 </Link>
               </div>
             </div>
 
-            {/* Support Note */}
-            <p className="text-center text-gray-400 text-xs mt-6">
+            <p className="text-center text-gray-600 text-xs mt-6">
               Need help? Contact us at{" "}
-              <a
-                href="mailto:support@starreachapp.com"
-                className="text-black underline"
-              >
-                support@starreachapp.com
+              <a href="mailto:support@gigceleb.com" className="text-yellow-400 underline">
+                support@gigceleb.com
               </a>
             </p>
           </div>
@@ -248,24 +246,22 @@ export default function BookingClient({ params }) {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-gray-50 pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+      <main className="min-h-screen bg-black pt-24 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
 
           {/* Back */}
           <Link
             href={`/celebrities/${slug}`}
-            className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-black transition mb-8"
+            className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-yellow-400 transition mb-8"
           >
             ← Back to {celebrity?.name}
           </Link>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-            {/* Left — Summary Card */}
+            {/* Left — Summary */}
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden sticky top-24">
-
-                {/* Celebrity Photo */}
+              <div className="bg-zinc-900 border border-yellow-400/20 rounded-2xl overflow-hidden sticky top-24">
                 <div className="relative h-48 w-full">
                   <Image
                     src={celebrity?.photo || PLACEHOLDER}
@@ -273,31 +269,26 @@ export default function BookingClient({ params }) {
                     fill
                     className="object-cover object-top"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent" />
                 </div>
 
                 <div className="p-5">
-                  <h3 className="font-bold text-black text-lg">
-                    {celebrity?.name}
-                  </h3>
-                  <p className="text-gray-400 text-sm mb-4">
-                    {celebrity?.category}
-                  </p>
+                  <h3 className="font-black text-white text-lg">{celebrity?.name}</h3>
+                  <p className="text-gray-500 text-sm mb-4">{celebrity?.category}</p>
 
-                  {/* Selected Booking Type Card */}
+                  {/* Booking Type Card */}
                   {bookingLabel && (
                     <div
-                      className="relative rounded-2xl overflow-hidden h-20 mb-4"
+                      className="relative rounded-xl overflow-hidden h-20 mb-4 border border-yellow-400/20"
                       style={{
                         backgroundImage: `url(${bookingLabel?.bg})`,
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                       }}
                     >
-                      <div
-                        className={`absolute inset-0 ${bookingLabel?.overlay}`}
-                      />
+                      <div className={`absolute inset-0 ${bookingLabel?.overlay}`} />
                       <div className="absolute inset-0 flex items-end p-3">
-                        <p className="text-white font-bold text-sm">
+                        <p className="text-white font-black text-sm">
                           {bookingLabel?.icon} {bookingLabel?.label}
                         </p>
                       </div>
@@ -305,13 +296,21 @@ export default function BookingClient({ params }) {
                   )}
 
                   {/* Price */}
-                  <div className="bg-black rounded-xl p-4">
-                    <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">
-                      Total Amount
-                    </p>
-                    <p className="font-bold text-white text-2xl">
-                      ${selectedBookingType?.price?.toLocaleString()}
-                    </p>
+                  <div
+                    className="relative rounded-xl overflow-hidden p-4"
+                    style={{
+                      backgroundImage: `url(${bookingLabel?.bg})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                  >
+                    <div className={`absolute inset-0 ${bookingLabel?.overlay}`} />
+                    <div className="relative z-10">
+                      <p className="text-white/60 text-xs uppercase tracking-wider mb-1">Total Amount</p>
+                      <p className={`font-black text-2xl ${bookingLabel?.priceColor}`}>
+                        ${selectedBookingType?.price?.toLocaleString()}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -319,48 +318,44 @@ export default function BookingClient({ params }) {
 
             {/* Right — Form */}
             <div className="lg:col-span-2">
-              <div className="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8">
-                <h1 className="text-2xl sm:text-3xl font-bold text-black mb-2">
+              <div className="bg-zinc-900 border border-yellow-400/20 rounded-2xl p-6 sm:p-8">
+                <h1 className="text-2xl sm:text-3xl font-black text-white mb-2">
                   Complete Your Booking
                 </h1>
-                <p className="text-gray-500 text-sm mb-8">
+                <p className="text-gray-400 text-sm mb-8">
                   Fill in the details below to book{" "}
-                  <strong>{celebrity?.name}</strong> for{" "}
-                  <strong>{bookingLabel?.label}</strong>.
+                  <strong className="text-white">{celebrity?.name}</strong> for{" "}
+                  <strong className={bookingLabel?.priceColor}>{bookingLabel?.label}</strong>.
                 </p>
 
                 {error && (
-                  <div className="bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded-xl mb-6">
+                  <div className="bg-red-400/10 border border-red-400/30 text-red-400 text-sm px-4 py-3 rounded-xl mb-6">
                     {error}
                   </div>
                 )}
 
                 {/* User Info */}
                 <div className="mb-6">
-                  <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wider mb-4">
+                  <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">
                     Your Information
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="text-sm font-medium text-gray-700 block mb-1">
-                        Full Name
-                      </label>
+                      <label className="text-sm font-medium text-gray-300 block mb-1">Full Name</label>
                       <input
                         type="text"
                         value={session?.user?.name || ""}
                         disabled
-                        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 text-gray-900 font-medium cursor-not-allowed"
+                        className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-sm text-gray-300 font-medium cursor-not-allowed"
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-700 block mb-1">
-                        Email Address
-                      </label>
+                      <label className="text-sm font-medium text-gray-300 block mb-1">Email Address</label>
                       <input
                         type="email"
                         value={session?.user?.email || ""}
                         disabled
-                        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 text-gray-900 font-medium cursor-not-allowed"
+                        className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-sm text-gray-300 font-medium cursor-not-allowed"
                       />
                     </div>
                   </div>
@@ -368,7 +363,7 @@ export default function BookingClient({ params }) {
 
                 {/* Scheduled Date */}
                 <div className="mb-6">
-                  <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wider mb-4">
+                  <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">
                     Preferred Date (Optional)
                   </h2>
                   <input
@@ -376,13 +371,13 @@ export default function BookingClient({ params }) {
                     value={scheduledDate}
                     onChange={(e) => setScheduledDate(e.target.value)}
                     min={new Date().toISOString().split("T")[0]}
-                    className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-black transition text-gray-900"
+                    className="w-full bg-zinc-800 border border-zinc-700 focus:border-yellow-400 rounded-xl px-4 py-3 text-sm text-gray-300 focus:outline-none transition"
                   />
                 </div>
 
                 {/* Notes */}
                 <div className="mb-8">
-                  <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wider mb-4">
+                  <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">
                     Additional Notes (Optional)
                   </h2>
                   <textarea
@@ -390,7 +385,7 @@ export default function BookingClient({ params }) {
                     onChange={(e) => setNotes(e.target.value)}
                     placeholder="Any special requirements or details about your booking..."
                     rows={4}
-                    className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-black transition resize-none text-gray-900 placeholder-gray-400"
+                    className="w-full bg-zinc-800 border border-zinc-700 focus:border-yellow-400 rounded-xl px-4 py-3 text-sm text-gray-300 placeholder-gray-600 focus:outline-none transition resize-none"
                   />
                 </div>
 
@@ -398,19 +393,17 @@ export default function BookingClient({ params }) {
                 <button
                   onClick={handleBooking}
                   disabled={submitting}
-                  className="w-full bg-black text-white py-4 rounded-full text-sm font-semibold hover:bg-gray-800 transition disabled:opacity-50"
+                  className="w-full bg-yellow-400 text-black py-4 rounded-full text-sm font-black hover:bg-yellow-300 transition disabled:opacity-50 shadow-lg shadow-yellow-400/25"
                 >
                   {submitting
                     ? "Processing..."
                     : `Confirm Booking — $${selectedBookingType?.price?.toLocaleString()}`}
                 </button>
 
-                <p className="text-gray-400 text-xs text-center mt-4">
+                <p className="text-gray-600 text-xs text-center mt-4">
                   By confirming, you agree to our{" "}
-                  <Link href="/terms" className="underline">
-                    Terms of Service
-                  </Link>
-                  . Payment instructions will be sent to your email.
+                  <Link href="/terms" className="underline text-gray-500">Terms of Service</Link>.
+                  Payment instructions will be sent to your email.
                 </p>
               </div>
             </div>
