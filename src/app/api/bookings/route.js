@@ -59,7 +59,7 @@ export async function POST(req) {
     // Fetch user details for email
     const user = await User.findById(session.user.id);
 
-    // Send emails in background (don't await to keep response fast)
+    // Send emails
     try {
       await Promise.all([
         sendBookingConfirmationEmail({
@@ -83,7 +83,6 @@ export async function POST(req) {
       ]);
     } catch (emailError) {
       console.error("Email sending failed:", emailError);
-      // Don't fail the booking if email fails
     }
 
     return NextResponse.json({ booking }, { status: 201 });
@@ -91,6 +90,28 @@ export async function POST(req) {
     console.error("BOOKING ERROR:", error);
     return NextResponse.json(
       { error: error.message || "Failed to create booking" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function GET(req) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    await connectDB();
+
+    const bookings = await Booking.find({ user: session.user.id })
+      .populate("celebrity", "name photo slug")
+      .sort({ createdAt: -1 });
+
+    return NextResponse.json({ bookings }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      { error: error.message || "Failed to fetch bookings" },
       { status: 500 }
     );
   }

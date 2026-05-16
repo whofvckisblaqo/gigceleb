@@ -1,7 +1,7 @@
 import resend from "@/lib/resend";
 
 const FROM_EMAIL = "Gigceleb <support@gigceleb.com>";
-const ADMIN_EMAIL = "support@gigceleb.com";
+const ADMIN_EMAIL = "gigcelebsupport@gmail.com";
 
 // ── Email to user after booking ──
 export async function sendBookingConfirmationEmail({
@@ -46,8 +46,8 @@ export async function sendBookingConfirmationEmail({
 
             <!-- Body -->
             <div style="padding:32px;">
-              <h2 style="color:#ffffff;font-size:20px;margin:0 0 8px;">Booking Received! ✅</h2>
-              <p style="color:#9ca3af;font-size:14px;margin:0 0 24px;">
+              <h2 style="color:#ffffff;font-size:20px;margin:0 0 8px;font-weight:900;">Booking Received! ✅</h2>
+              <p style="color:#9ca3af;font-size:14px;margin:0 0 24px;line-height:1.6;">
                 Hi ${userName}, your booking request has been successfully submitted.
                 Our team will review and confirm your booking shortly.
               </p>
