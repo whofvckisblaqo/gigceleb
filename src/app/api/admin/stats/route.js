@@ -6,46 +6,30 @@ import Celebrity from "@/lib/models/Celebrity";
 import Booking from "@/lib/models/Booking";
 import User from "@/lib/models/User";
 
-export async function GET() {
+export async function GET(req) {
   try {
     const session = await getServerSession(authOptions);
-
     if (!session || session.user.role !== "admin") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     await connectDB();
 
-    const [totalCelebrities, totalBookings, totalUsers, revenueData, recentBookings] =
-      await Promise.all([
-        Celebrity.countDocuments(),
-        Booking.countDocuments(),
-        User.countDocuments(),
-        Booking.aggregate([
-          { $match: { paymentStatus: "paid" } },
-          { $group: { _id: null, total: { $sum: "$amount" } } },
-        ]),
-        Booking.find()
-          .populate("user", "name email")
-          .populate("celebrity", "name")
-          .sort({ createdAt: -1 })
-          .limit(5),
-      ]);
+    const [celebrities, bookings, users, pendingBookings] = await Promise.all([
+      Celebrity.countDocuments(),
+      Booking.countDocuments(),
+      User.countDocuments({ role: "user" }),
+      Booking.countDocuments({ status: "pending" }),
+    ]);
 
     return NextResponse.json({
-      stats: {
-        totalCelebrities,
-        totalBookings,
-        totalUsers,
-        totalRevenue: revenueData[0]?.total || 0,
-      },
-      recentBookings,
+      celebrities,
+      bookings,
+      users,
+      pendingBookings,
     });
   } catch (error) {
     console.error("STATS ERROR:", error);
-    return NextResponse.json(
-      { error: error.message || "Failed to fetch stats" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

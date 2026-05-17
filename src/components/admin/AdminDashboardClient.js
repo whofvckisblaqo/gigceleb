@@ -3,10 +3,19 @@ import { useState, useEffect } from "react";
 import { signOut } from "next-auth/react";
 
 export default function AdminDashboardClient({ session }) {
-  const [stats, setStats] = useState(null);
+  const [stats, setStats] = useState({
+    celebrities: 0,
+    bookings: 0,
+    users: 0,
+    pendingBookings: 0,
+  });
   const [loading, setLoading] = useState(true);
   const [changingPassword, setChangingPassword] = useState(false);
-  const [passwordForm, setPasswordForm] = useState({ current: "", new: "", confirm: "" });
+  const [passwordForm, setPasswordForm] = useState({
+    current: "",
+    new: "",
+    confirm: "",
+  });
   const [passwordError, setPasswordError] = useState("");
   const [passwordSuccess, setPasswordSuccess] = useState("");
 
@@ -14,10 +23,19 @@ export default function AdminDashboardClient({ session }) {
     const fetchStats = async () => {
       try {
         const res = await fetch("/api/admin/stats");
+        if (!res.ok) {
+          console.error("Stats fetch failed:", res.status);
+          return;
+        }
         const data = await res.json();
-        setStats(data);
+        setStats({
+          celebrities: data.celebrities ?? 0,
+          bookings: data.bookings ?? 0,
+          users: data.users ?? 0,
+          pendingBookings: data.pendingBookings ?? 0,
+        });
       } catch (error) {
-        console.error("Error:", error);
+        console.error("Error fetching stats:", error);
       } finally {
         setLoading(false);
       }
@@ -65,10 +83,42 @@ export default function AdminDashboardClient({ session }) {
   };
 
   const statCards = [
-    { label: "Total Celebrities", value: stats?.celebrities ?? "—", icon: "⭐", color: "text-yellow-400" },
-    { label: "Total Bookings", value: stats?.bookings ?? "—", icon: "📅", color: "text-blue-400" },
-    { label: "Total Users", value: stats?.users ?? "—", icon: "👥", color: "text-emerald-400" },
-    { label: "Pending Bookings", value: stats?.pendingBookings ?? "—", icon: "⏳", color: "text-rose-400" },
+    {
+      label: "Total Celebrities",
+      value: stats.celebrities,
+      icon: "⭐",
+      color: "text-yellow-400",
+      bg: "bg-yellow-400/10",
+      border: "border-yellow-400/20",
+      href: "/admin/celebrities",
+    },
+    {
+      label: "Total Bookings",
+      value: stats.bookings,
+      icon: "📅",
+      color: "text-blue-400",
+      bg: "bg-blue-400/10",
+      border: "border-blue-400/20",
+      href: "/admin/bookings",
+    },
+    {
+      label: "Total Users",
+      value: stats.users,
+      icon: "👥",
+      color: "text-emerald-400",
+      bg: "bg-emerald-400/10",
+      border: "border-emerald-400/20",
+      href: "/admin/users",
+    },
+    {
+      label: "Pending Bookings",
+      value: stats.pendingBookings,
+      icon: "⏳",
+      color: "text-rose-400",
+      bg: "bg-rose-400/10",
+      border: "border-rose-400/20",
+      href: "/admin/bookings",
+    },
   ];
 
   return (
@@ -87,25 +137,45 @@ export default function AdminDashboardClient({ session }) {
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {statCards.map((stat, i) => (
-          <div
+          <a
             key={i}
-            className="bg-zinc-900 border border-yellow-400/10 hover:border-yellow-400/30 rounded-2xl p-5 transition group"
+            href={stat.href}
+            className={`${stat.bg} border ${stat.border} hover:border-opacity-60 rounded-2xl p-5 transition group cursor-pointer`}
           >
             <p className="text-2xl mb-3">{stat.icon}</p>
-            <p className={`text-3xl font-black mb-1 ${stat.color}`}>
-              {loading ? "—" : stat.value}
-            </p>
+            {loading ? (
+              <div className="h-9 bg-zinc-800 rounded animate-pulse mb-1 w-16" />
+            ) : (
+              <p className={`text-3xl sm:text-4xl font-black mb-1 ${stat.color}`}>
+                {stat.value.toLocaleString()}
+              </p>
+            )}
             <p className="text-gray-500 text-xs">{stat.label}</p>
-          </div>
+          </a>
         ))}
       </div>
 
       {/* Quick Links */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         {[
-          { href: "/admin/celebrities/add", label: "Add Celebrity", icon: "➕", desc: "Add a new celebrity to the roster" },
-          { href: "/admin/bookings", label: "Manage Bookings", icon: "📋", desc: "View and update booking statuses" },
-          { href: "/admin/users", label: "Manage Users", icon: "👥", desc: "View and manage user accounts" },
+          {
+            href: "/admin/celebrities/add",
+            label: "Add Celebrity",
+            icon: "➕",
+            desc: "Add a new celebrity to the roster",
+          },
+          {
+            href: "/admin/bookings",
+            label: "Manage Bookings",
+            icon: "📋",
+            desc: "View and update booking statuses",
+          },
+          {
+            href: "/admin/users",
+            label: "Manage Users",
+            icon: "👥",
+            desc: "View and manage user accounts",
+          },
         ].map((item, i) => (
           <a
             key={i}
@@ -137,7 +207,10 @@ export default function AdminDashboardClient({ session }) {
         </div>
 
         {changingPassword && (
-          <form onSubmit={handlePasswordChange} className="space-y-4 mt-4 border-t border-yellow-400/10 pt-4">
+          <form
+            onSubmit={handlePasswordChange}
+            className="space-y-4 mt-4 border-t border-yellow-400/10 pt-4"
+          >
             {passwordError && (
               <div className="bg-red-400/10 border border-red-400/30 text-red-400 text-sm px-4 py-3 rounded-xl">
                 {passwordError}
@@ -150,31 +223,43 @@ export default function AdminDashboardClient({ session }) {
             )}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="text-sm font-medium text-gray-300 block mb-1">Current Password</label>
+                <label className="text-sm font-medium text-gray-300 block mb-1">
+                  Current Password
+                </label>
                 <input
                   type="password"
                   value={passwordForm.current}
-                  onChange={(e) => setPasswordForm({ ...passwordForm, current: e.target.value })}
+                  onChange={(e) =>
+                    setPasswordForm({ ...passwordForm, current: e.target.value })
+                  }
                   required
                   className="w-full bg-zinc-800 border border-zinc-700 focus:border-yellow-400 rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition"
                 />
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-300 block mb-1">New Password</label>
+                <label className="text-sm font-medium text-gray-300 block mb-1">
+                  New Password
+                </label>
                 <input
                   type="password"
                   value={passwordForm.new}
-                  onChange={(e) => setPasswordForm({ ...passwordForm, new: e.target.value })}
+                  onChange={(e) =>
+                    setPasswordForm({ ...passwordForm, new: e.target.value })
+                  }
                   required
                   className="w-full bg-zinc-800 border border-zinc-700 focus:border-yellow-400 rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition"
                 />
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-300 block mb-1">Confirm Password</label>
+                <label className="text-sm font-medium text-gray-300 block mb-1">
+                  Confirm Password
+                </label>
                 <input
                   type="password"
                   value={passwordForm.confirm}
-                  onChange={(e) => setPasswordForm({ ...passwordForm, confirm: e.target.value })}
+                  onChange={(e) =>
+                    setPasswordForm({ ...passwordForm, confirm: e.target.value })
+                  }
                   required
                   className="w-full bg-zinc-800 border border-zinc-700 focus:border-yellow-400 rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition"
                 />
