@@ -151,7 +151,7 @@ export default function CelebritiesClient() {
                     <span>💬</span>
                     Chat with Support
                   </button>
-                  
+                  <a
                     href="mailto:support@gigceleb.com?subject=Celebrity Request&body=Hi, I was looking for a celebrity that isn't listed on Gigceleb. Here are the details:"
                     className="flex items-center gap-2 border border-yellow-400/50 text-yellow-400 px-6 py-3 rounded-full text-sm font-semibold hover:bg-yellow-400 hover:text-black transition"
                   >
@@ -175,7 +175,7 @@ export default function CelebritiesClient() {
                     <p className="font-black text-white text-sm mb-1">Email Support</p>
                     <p className="text-gray-500 text-xs leading-relaxed">
                       Send us an email at{" "}
-                      
+                      <a
                         href="mailto:support@gigceleb.com"
                         className="text-yellow-400 underline"
                       >
