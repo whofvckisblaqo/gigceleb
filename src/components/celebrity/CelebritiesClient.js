@@ -50,10 +50,17 @@ export default function CelebritiesClient() {
     return Math.min(...prices).toLocaleString();
   };
 
+  const openLiveChat = () => {
+    if (window.Tawk_API) {
+      window.Tawk_API.maximize();
+    }
+  };
+
   return (
     <>
       <Navbar />
       <main className="min-h-screen bg-black pt-24">
+
         {/* Header */}
         <section className="bg-zinc-950 border-b border-yellow-400/20 py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto text-center">
@@ -125,9 +132,66 @@ export default function CelebritiesClient() {
               </div>
             ) : celebrities.length === 0 ? (
               <div className="text-center py-20">
-                <p className="text-5xl mb-4">🔍</p>
-                <h3 className="text-xl font-black text-white mb-2">No celebrities found</h3>
-                <p className="text-gray-500 text-sm">Try a different search or category.</p>
+                <p className="text-6xl mb-4">🔍</p>
+                <h3 className="text-2xl font-black text-white mb-3">
+                  No Celebrities Found
+                </h3>
+                <p className="text-gray-400 text-sm sm:text-base mb-8 max-w-md mx-auto leading-relaxed">
+                  We couldn't find any celebrities matching your search. Try a
+                  different name or category — or reach out to us and we'll
+                  help you find the right celebrity!
+                </p>
+
+                {/* Contact Options */}
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+                  <button
+                    onClick={openLiveChat}
+                    className="flex items-center gap-2 bg-yellow-400 text-black px-6 py-3 rounded-full text-sm font-black hover:bg-yellow-300 transition shadow-lg shadow-yellow-400/25"
+                  >
+                    <span>💬</span>
+                    Chat with Support
+                  </button>
+                  
+                    href="mailto:support@gigceleb.com?subject=Celebrity Request&body=Hi, I was looking for a celebrity that isn't listed on Gigceleb. Here are the details:"
+                    className="flex items-center gap-2 border border-yellow-400/50 text-yellow-400 px-6 py-3 rounded-full text-sm font-semibold hover:bg-yellow-400 hover:text-black transition"
+                  >
+                    <span>📧</span>
+                    Email Us
+                  </a>
+                </div>
+
+                {/* Info cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg mx-auto">
+                  <div className="bg-zinc-900 border border-yellow-400/10 rounded-2xl p-5 text-left">
+                    <p className="text-xl mb-2">💬</p>
+                    <p className="font-black text-white text-sm mb-1">Live Chat</p>
+                    <p className="text-gray-500 text-xs leading-relaxed">
+                      Chat with our support team in real time. We're available
+                      Mon–Fri, 9am–6pm EST.
+                    </p>
+                  </div>
+                  <div className="bg-zinc-900 border border-yellow-400/10 rounded-2xl p-5 text-left">
+                    <p className="text-xl mb-2">📧</p>
+                    <p className="font-black text-white text-sm mb-1">Email Support</p>
+                    <p className="text-gray-500 text-xs leading-relaxed">
+                      Send us an email at{" "}
+                      
+                        href="mailto:support@gigceleb.com"
+                        className="text-yellow-400 underline"
+                      >
+                        support@gigceleb.com
+                      </a>{" "}
+                      and we'll respond within 24 hours.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-8 pt-8 border-t border-yellow-400/10 max-w-md mx-auto">
+                  <p className="text-gray-600 text-xs leading-relaxed">
+                    Can't find who you're looking for? Our team can help source
+                    any celebrity for your exclusive experience.
+                  </p>
+                </div>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -154,7 +218,7 @@ export default function CelebritiesClient() {
                           </span>
                         )}
                       </div>
-                      {/* Verified badge on image */}
+                      {/* Verified badge */}
                       {celeb.verified && (
                         <div className="absolute top-3 right-3">
                           <VerifiedBadge size="md" />
