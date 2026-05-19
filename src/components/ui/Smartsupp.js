@@ -1,23 +1,24 @@
-"use client";
-import { useEffect } from "react";
+import "./globals.css";
+import { Inter } from "next/font/google";
+import SessionProviderWrapper from "@/components/SessionProviderWrapper";
+import Smartsupp from "@/components/Smartsupp";
 
-export default function Smartsupp() {
-  useEffect(() => {
-    var _smartsupp = _smartsupp || {};
-    _smartsupp.key = "3d20e4f0077bf03799380556b01f241641e1f762";
+const inter = Inter({ subsets: ["latin"] });
 
-    (function (d) {
-      var s, c, o = window.smartsupp = function () { o._.push(arguments); };
-      o._ = [];
-      s = d.getElementsByTagName("script")[0];
-      c = d.createElement("script");
-      c.type = "text/javascript";
-      c.charset = "utf-8";
-      c.async = true;
-      c.src = "https://www.smartsuppchat.com/loader.js?";
-      s.parentNode.insertBefore(c, s);
-    })(document);
-  }, []);
+export const metadata = {
+  title: "Your Website Name",
+  description: "Your Website Description",
+};
 
-  return null;
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body className={inter.className}>
+        <SessionProviderWrapper>
+          <Smartsupp />
+          {children}
+        </SessionProviderWrapper>
+      </body>
+    </html>
+  );
 }
