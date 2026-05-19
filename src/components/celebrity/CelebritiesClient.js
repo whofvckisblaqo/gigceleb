@@ -51,10 +51,10 @@ export default function CelebritiesClient() {
   };
 
   const openLiveChat = () => {
-    if (window.Tawk_API) {
-      window.Tawk_API.maximize();
-    }
-  };
+  if (window.smartsupp) {
+    window.smartsupp("chat:open");
+  }
+};
 
   return (
     <>
