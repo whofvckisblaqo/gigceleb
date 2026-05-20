@@ -1,35 +1,25 @@
 "use client";
-import { useEffect } from "react";
+import Script from "next/script";
 
 export default function Smartsupp() {
-  useEffect(() => {
-    // Set key before loading script
-    window._smartsupp = window._smartsupp || {};
-    window._smartsupp.key = "3d20e4f0077bf03799380556b01f241641e1f762";
-
-    // Initialize smartsupp function
-    window.smartsupp = window.smartsupp || function () {
-      window.smartsupp._.push(arguments);
-    };
-    window.smartsupp._ = window.smartsupp._ || [];
-
-    // Create and inject script
-    const script = document.createElement("script");
-    script.type = "text/javascript";
-    script.charset = "utf-8";
-    script.async = true;
-    script.src = "https://www.smartsuppchat.com/loader.js?";
-
-    const firstScript = document.getElementsByTagName("script")[0];
-    firstScript.parentNode.insertBefore(script, firstScript);
-
-    return () => {
-      // Cleanup on unmount
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
-      }
-    };
-  }, []);
-
-  return null;
+  return (
+    <>
+      <Script
+        id="smartsupp-config"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            var _smartsupp = _smartsupp || {};
+            _smartsupp.key = '3d20e4f0077bf03799380556b01f241641e1f762';
+            window.smartsupp||(function(d) {
+              var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+              s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+              c.type='text/javascript';c.charset='utf-8';c.async=true;
+              c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+            })(document);
+          `,
+        }}
+      />
+    </>
+  );
 }
