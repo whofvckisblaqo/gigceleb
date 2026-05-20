@@ -50,7 +50,7 @@ export default function CelebritiesClient() {
     return Math.min(...prices).toLocaleString();
   };
 
-  const openLiveChat = () => {
+const openLiveChat = () => {
   if (window.smartsupp) {
     window.smartsupp("chat:open");
   }
