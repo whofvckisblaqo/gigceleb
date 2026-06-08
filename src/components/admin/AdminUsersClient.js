@@ -322,6 +322,7 @@ export default function AdminUsersClient() {
                   },
                   { label: "Referral Code", value: selectedUser.referralCode || "—", icon: "🔗" },
                   { label: "Referrals Made", value: selectedUser.referralCount || 0, icon: "👥" },
+                  { label: "Referred By", value: selectedUser.referredBy ? `${selectedUser.referredBy.name} (${selectedUser.referredBy.email})` : "Organic signup", icon: "🧭" },
                 ].map((item, i) => (
                   <div key={i} className="bg-zinc-800 rounded-xl px-4 py-3 flex items-start gap-3">
                     <span className="text-sm flex-shrink-0">{item.icon}</span>
@@ -453,6 +454,7 @@ export default function AdminUsersClient() {
                 },
                 { label: "Referral Code", value: selectedUser.referralCode || "—", icon: "🔗" },
                 { label: "Referrals Made", value: selectedUser.referralCount || 0, icon: "👥" },
+                { label: "Referred By", value: selectedUser.referredBy ? `${selectedUser.referredBy.name} (${selectedUser.referredBy.email})` : "Organic signup", icon: "🧭" },
               ].map((item, i) => (
                 <div key={i} className="bg-zinc-800 rounded-xl px-4 py-3 flex items-start gap-3">
                   <span className="text-sm flex-shrink-0">{item.icon}</span>

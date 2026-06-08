@@ -15,6 +15,7 @@ export async function GET(req) {
 
     const users = await User.find({ role: "user" })
       .select("name email phone country status isVerified createdAt lastLogin referralCode referralCount referredBy")
+      .populate("referredBy", "name email")
       .sort({ createdAt: -1 });
 
     return NextResponse.json({ users }, { status: 200 });
