@@ -13,7 +13,9 @@ export async function GET(req, { params }) {
 
     await connectDB();
 
-    const referred = await User.find({ referredBy: params.id })
+    const { id } = await params;
+
+    const referred = await User.find({ referredBy: id })
       .select("name email country createdAt status")
       .sort({ createdAt: -1 });
 
