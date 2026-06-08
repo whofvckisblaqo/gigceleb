@@ -141,7 +141,7 @@ export default function DashboardClient({ session }) {
               <div className="mb-5">
                 <p className="text-sm text-gray-400 mb-2">Your referral link</p>
                 <div className="flex gap-2">
-                  <div className="flex-1 bg-black border border-zinc-700 rounded-xl px-4 py-3 text-sm text-gray-300 truncate font-mono">
+                  <div className="flex-1 bg-black border border-zinc-700 rounded-xl px-4 py-3 text-xs text-gray-300 break-all font-mono leading-relaxed">
                     {referralLink}
                   </div>
                   <button
