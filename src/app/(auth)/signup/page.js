@@ -1,7 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const countries = [
   "United States", "United Kingdom", "Canada", "Australia", "Nigeria",
@@ -9,13 +9,21 @@ const countries = [
   "Brazil", "Mexico", "UAE", "Saudi Arabia", "Singapore", "Other"
 ];
 
-export default function SignupPage() {
+function SignupForm() {
+
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [step, setStep] = useState(1);
+  const [refCode, setRefCode] = useState("");
   const [form, setForm] = useState({
     name: "", email: "", phone: "", country: "",
     password: "", confirmPassword: "",
   });
+
+  useEffect(() => {
+    const ref = searchParams.get("ref");
+    if (ref) setRefCode(ref.toUpperCase());
+  }, [searchParams]);
   const [verificationCode, setVerificationCode] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -34,7 +42,7 @@ export default function SignupPage() {
       const res = await fetch("/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: form.name, email: form.email, phone: form.phone, country: form.country, password: form.password }),
+        body: JSON.stringify({ name: form.name, email: form.email, phone: form.phone, country: form.country, password: form.password, referralCode: refCode || undefined }),
       });
       const data = await res.json();
       if (!res.ok) { setError(data.error); setLoading(false); return; }
@@ -211,5 +219,13 @@ export default function SignupPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SignupPage() {
+  return (
+    <Suspense fallback={null}>
+      <SignupForm />
+    </Suspense>
   );
 }

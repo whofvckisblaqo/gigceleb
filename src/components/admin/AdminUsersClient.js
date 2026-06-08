@@ -7,6 +7,8 @@ export default function AdminUsersClient() {
   const [search, setSearch] = useState("");
   const [actionLoading, setActionLoading] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [referredUsers, setReferredUsers] = useState([]);
+  const [referralsLoading, setReferralsLoading] = useState(false);
 
   useEffect(() => {
     fetchUsers();
@@ -21,6 +23,28 @@ export default function AdminUsersClient() {
       console.error("Error:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const selectUser = async (user) => {
+    if (selectedUser?._id === user._id) {
+      setSelectedUser(null);
+      setReferredUsers([]);
+      return;
+    }
+    setSelectedUser(user);
+    setReferredUsers([]);
+    if (user.referralCount > 0) {
+      setReferralsLoading(true);
+      try {
+        const res = await fetch(`/api/admin/users/${user._id}/referrals`);
+        const data = await res.json();
+        setReferredUsers(data.referred || []);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setReferralsLoading(false);
+      }
     }
   };
 
@@ -125,6 +149,7 @@ export default function AdminUsersClient() {
                       <th className="text-left px-5 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">User</th>
                       <th className="text-left px-5 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Phone</th>
                       <th className="text-left px-5 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Country</th>
+                      <th className="text-left px-5 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Referrals</th>
                       <th className="text-left px-5 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
                       <th className="text-left px-5 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Joined</th>
                       <th className="text-right px-5 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
@@ -134,9 +159,7 @@ export default function AdminUsersClient() {
                     {filtered.map((user) => (
                       <tr
                         key={user._id}
-                        onClick={() => setSelectedUser(
-                          selectedUser?._id === user._id ? null : user
-                        )}
+                        onClick={() => selectUser(user)}
                         className={`hover:bg-zinc-800/50 transition cursor-pointer ${
                           selectedUser?._id === user._id
                             ? "bg-yellow-400/5 border-l-2 border-yellow-400"
@@ -172,6 +195,17 @@ export default function AdminUsersClient() {
                           <p className="text-gray-400 text-sm">
                             {user.country || "—"}
                           </p>
+                        </td>
+
+                        {/* Referrals */}
+                        <td className="px-5 py-4">
+                          {user.referralCount > 0 ? (
+                            <span className="inline-flex items-center gap-1 bg-yellow-400/10 text-yellow-400 text-xs font-bold px-2.5 py-1 rounded-full">
+                              🔗 {user.referralCount}
+                            </span>
+                          ) : (
+                            <span className="text-gray-600 text-sm">—</span>
+                          )}
                         </td>
 
                         {/* Status */}
@@ -286,6 +320,8 @@ export default function AdminUsersClient() {
                     }),
                     icon: "📅",
                   },
+                  { label: "Referral Code", value: selectedUser.referralCode || "—", icon: "🔗" },
+                  { label: "Referrals Made", value: selectedUser.referralCount || 0, icon: "👥" },
                 ].map((item, i) => (
                   <div key={i} className="bg-zinc-800 rounded-xl px-4 py-3 flex items-start gap-3">
                     <span className="text-sm flex-shrink-0">{item.icon}</span>
@@ -296,6 +332,41 @@ export default function AdminUsersClient() {
                   </div>
                 ))}
               </div>
+
+              {/* Referred users */}
+              {(selectedUser.referralCount > 0) && (
+                <div className="mb-6">
+                  <p className="text-xs uppercase tracking-widest text-gray-500 font-semibold mb-3">People Referred</p>
+                  {referralsLoading ? (
+                    <div className="space-y-2">
+                      {[...Array(2)].map((_, i) => (
+                        <div key={i} className="animate-pulse h-12 bg-zinc-800 rounded-xl" />
+                      ))}
+                    </div>
+                  ) : referredUsers.length > 0 ? (
+                    <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                      {referredUsers.map((u, i) => (
+                        <div key={i} className="bg-zinc-800 rounded-xl px-4 py-3 flex items-center gap-3">
+                          <div className="w-7 h-7 bg-yellow-400/20 rounded-full flex items-center justify-center text-yellow-400 font-bold text-xs flex-shrink-0">
+                            {u.name?.charAt(0)?.toUpperCase()}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-white text-sm font-semibold truncate">{u.name}</p>
+                            <p className="text-gray-500 text-xs">{u.country || u.email || ""}</p>
+                          </div>
+                          <span className={`text-xs px-2 py-0.5 rounded-full font-semibold flex-shrink-0 ${
+                            u.status === "frozen" ? "bg-red-400/10 text-red-400" : "bg-emerald-400/10 text-emerald-400"
+                          }`}>
+                            {u.status === "frozen" ? "Frozen" : "Active"}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-gray-600 text-sm">No data available.</p>
+                  )}
+                </div>
+              )}
 
               {/* Actions */}
               <div className="space-y-2">
@@ -380,6 +451,8 @@ export default function AdminUsersClient() {
                   }),
                   icon: "📅",
                 },
+                { label: "Referral Code", value: selectedUser.referralCode || "—", icon: "🔗" },
+                { label: "Referrals Made", value: selectedUser.referralCount || 0, icon: "👥" },
               ].map((item, i) => (
                 <div key={i} className="bg-zinc-800 rounded-xl px-4 py-3 flex items-start gap-3">
                   <span className="text-sm flex-shrink-0">{item.icon}</span>
@@ -390,6 +463,41 @@ export default function AdminUsersClient() {
                 </div>
               ))}
             </div>
+
+            {/* Referred users — mobile */}
+            {(selectedUser.referralCount > 0) && (
+              <div className="mb-6">
+                <p className="text-xs uppercase tracking-widest text-gray-500 font-semibold mb-3">People Referred</p>
+                {referralsLoading ? (
+                  <div className="space-y-2">
+                    {[...Array(2)].map((_, i) => (
+                      <div key={i} className="animate-pulse h-12 bg-zinc-800 rounded-xl" />
+                    ))}
+                  </div>
+                ) : referredUsers.length > 0 ? (
+                  <div className="space-y-2">
+                    {referredUsers.map((u, i) => (
+                      <div key={i} className="bg-zinc-800 rounded-xl px-4 py-3 flex items-center gap-3">
+                        <div className="w-7 h-7 bg-yellow-400/20 rounded-full flex items-center justify-center text-yellow-400 font-bold text-xs flex-shrink-0">
+                          {u.name?.charAt(0)?.toUpperCase()}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-white text-sm font-semibold truncate">{u.name}</p>
+                          <p className="text-gray-500 text-xs">{u.country || ""}</p>
+                        </div>
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-semibold flex-shrink-0 ${
+                          u.status === "frozen" ? "bg-red-400/10 text-red-400" : "bg-emerald-400/10 text-emerald-400"
+                        }`}>
+                          {u.status === "frozen" ? "Frozen" : "Active"}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-600 text-sm">No data available.</p>
+                )}
+              </div>
+            )}
 
             {/* Actions */}
             <div className="space-y-2">
@@ -416,7 +524,7 @@ export default function AdminUsersClient() {
                 🗑️ Delete Account
               </button>
               <button
-                onClick={() => setSelectedUser(null)}
+                onClick={() => { setSelectedUser(null); setReferredUsers([]); }}
                 className="w-full py-3 rounded-full text-sm font-semibold border border-zinc-700 text-gray-400 hover:text-white transition"
               >
                 Close

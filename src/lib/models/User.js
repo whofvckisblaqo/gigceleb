@@ -14,6 +14,9 @@ const UserSchema = new mongoose.Schema(
     verificationCode: { type: String },
     verificationExpiry: { type: Date },
     lastLogin: { type: Date },
+    referralCode: { type: String, unique: true, sparse: true },
+    referredBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    referralCount: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

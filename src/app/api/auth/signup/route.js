@@ -8,6 +8,25 @@ function generateCode() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
+function generateReferralCode() {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let code = "";
+  for (let i = 0; i < 8; i++) {
+    code += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return code;
+}
+
+async function createUniqueReferralCode() {
+  let code;
+  let exists = true;
+  while (exists) {
+    code = generateReferralCode();
+    exists = await User.findOne({ referralCode: code });
+  }
+  return code;
+}
+
 export async function POST(req) {
   try {
     await connectDB();
@@ -15,7 +34,7 @@ export async function POST(req) {
     const body = await req.json();
     console.log("SIGNUP BODY RECEIVED:", body);
 
-    const { name, email, password, phone, country } = body;
+    const { name, email, password, phone, country, referralCode: usedReferralCode } = body;
 
     if (!name || !email || !password) {
       return NextResponse.json(
@@ -42,6 +61,12 @@ export async function POST(req) {
     const hashedPassword = await bcrypt.hash(password, 12);
     const verificationCode = generateCode();
     const verificationExpiry = new Date(Date.now() + 10 * 60 * 1000);
+    const referralCode = await createUniqueReferralCode();
+
+    let referrer = null;
+    if (usedReferralCode) {
+      referrer = await User.findOne({ referralCode: usedReferralCode.toUpperCase().trim() });
+    }
 
     const user = await User.create({
       name,
@@ -52,7 +77,13 @@ export async function POST(req) {
       isVerified: false,
       verificationCode,
       verificationExpiry,
+      referralCode,
+      ...(referrer && { referredBy: referrer._id }),
     });
+
+    if (referrer) {
+      await User.findByIdAndUpdate(referrer._id, { $inc: { referralCount: 1 } });
+    }
 
     // Send verification email to actual user
     try {

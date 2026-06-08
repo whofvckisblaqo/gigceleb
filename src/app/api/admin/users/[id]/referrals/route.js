@@ -4,7 +4,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import connectDB from "@/lib/db";
 import User from "@/lib/models/User";
 
-export async function GET(req) {
+export async function GET(req, { params }) {
   try {
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== "admin") {
@@ -13,11 +13,11 @@ export async function GET(req) {
 
     await connectDB();
 
-    const users = await User.find({ role: "user" })
-      .select("name email phone country status isVerified createdAt lastLogin referralCode referralCount referredBy")
+    const referred = await User.find({ referredBy: params.id })
+      .select("name email country createdAt status")
       .sort({ createdAt: -1 });
 
-    return NextResponse.json({ users }, { status: 200 });
+    return NextResponse.json({ referred }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
